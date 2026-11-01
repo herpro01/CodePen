@@ -1207,6 +1207,11 @@ for (const button of document.querySelectorAll("[data-open-card]")) {
       return;
     }
 
+    if (!activeAuthUser) {
+      openAccount();
+      return;
+    }
+
     createProject(demo.title, demo);
   });
 }
