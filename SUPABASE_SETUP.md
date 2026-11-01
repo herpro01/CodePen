@@ -5,8 +5,8 @@ Fitur akun dan database project memakai Supabase Auth, Database, serta REST API 
 ## 1. Buat project Supabase dan tabel profil
 
 1. Buat project di [Supabase](https://supabase.com/dashboard).
-2. Buka **SQL Editor**, lalu jalankan seluruh isi [`supabase/profiles.sql`](./supabase/profiles.sql). Jika sudah pernah menjalankan versi sebelumnya, jalankan skrip lengkap lagi untuk membuat tabel project.
-3. Pastikan tabel `public.profiles` dan `public.projects` tersedia serta Row Level Security aktif. Kebijakan pada skrip membatasi profil dan project ke akun pemilik.
+2. Buka **SQL Editor**, lalu jalankan seluruh isi [`supabase/profiles.sql`](./supabase/profiles.sql). Jika sudah pernah menjalankan versi sebelumnya, jalankan skrip lengkap lagi untuk membuat tabel project dan bucket foto profil.
+3. Pastikan tabel `public.profiles` dan `public.projects` tersedia, bucket privat `profile-avatars` dibuat, serta Row Level Security aktif. Kebijakan pada skrip membatasi profil, project, dan foto ke akun pemilik.
 
 ## 2. Atur kredensial publik aplikasi
 
@@ -53,7 +53,7 @@ Pesan status task muncul di terminal VS Code **Auto-publish website to Vercel**.
 Uji alur berikut:
 
 1. Pilih **Masuk**, lalu lanjutkan dengan Google atau GitHub.
-2. Akun baru akan kembali ke halaman profil. Lengkapi dan simpan nama tampilan; bio boleh dikosongkan.
+2. Akun baru akan kembali ke halaman profil. Lengkapi dan simpan nama tampilan; bio boleh dikosongkan. Kamu juga dapat memilih foto JPG, PNG, atau WebP maksimal 5 MB, lalu menyimpannya bersama profil.
 3. Keluar, lalu masuk lagi dengan provider yang sama. Profil yang sudah lengkap tidak meminta pendaftaran ulang.
 4. Masuk dengan akun berbeda dan pastikan daftar project browsernya terpisah.
 
@@ -61,7 +61,7 @@ Jika login ditolak provider atau konfigurasi belum lengkap, periksa pesan di dia
 
 ## Batas penyimpanan dan privasi
 
-- Tabel profil menyimpan nama tampilan (`varchar(50)`), bio (`varchar(240)`), status onboarding, dan waktu pembaruan saja. Kebijakan RLS membatasi profil ke akun pemilik.
+- Tabel profil menyimpan nama tampilan (`varchar(50)`), bio (`varchar(240)`), lokasi foto, status onboarding, dan waktu pembaruan. Foto berada di bucket privat `profile-avatars`; kebijakan Storage membatasi baca, unggah, dan hapus berdasarkan folder ID akun.
 - Project milik akun disimpan di `public.projects` pada Supabase dan disinkronkan saat login, saat project berubah/dihapus, serta saat aplikasi kembali difokuskan. RLS membatasi setiap baris ke pemilik akun. Perangkat/browser yang login ke akun sama akan menggunakan project cloud tersebut.
 - Project lama yang tersimpan di browser sebelum login tidak diunggah otomatis. Dari **Save Proyek**, pilih **Simpan project lokal ke akun** bila ingin menyalinnya. Salinan lokal tidak dihapus.
 - Tanpa login, project tetap tersimpan di browser. Favorit contoh dan progres latihan juga tetap lokal dan tidak disinkronkan.

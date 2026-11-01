@@ -2344,6 +2344,7 @@ async function migrateUnscopedLocalProjects() {
 
 function openAccount() {
   if (activeAuthUser) {
+    updateAccountButton();
     showView("profile");
     return;
   }
@@ -2641,6 +2642,19 @@ profileAvatarFileInput.addEventListener("change", () => {
   }
   if (!profileAvatarMimeTypes.has(file.type) || file.size > maxProfileAvatarSize) {
     profileAvatarFileInput.value = "";
+    if (profileAvatarPreviewUrl) {
+      URL.revokeObjectURL(profileAvatarPreviewUrl);
+      profileAvatarPreviewUrl = "";
+    }
+    const avatarPath = activeProfile?.avatar_path || "";
+    profileAvatarPreview.dataset.avatarPath = avatarPath;
+    showProfileAvatarPreview(
+      "",
+      activeProfile?.display_name?.trim().charAt(0).toLocaleUpperCase("id") || "K",
+    );
+    if (avatarPath) {
+      void loadProfileAvatar(profileAvatarPreview, avatarPath);
+    }
     setAuthStatus(
       profileStatus,
       "Pilih foto berformat JPG, PNG, atau WebP dengan ukuran maksimal 5 MB.",
@@ -2681,6 +2695,7 @@ profileForm.addEventListener("submit", async (event) => {
   saveButton.disabled = true;
   setAuthStatus(profileStatus, "Menyimpan profil…");
   let uploadedAvatarPath = "";
+  let profileSaved = false;
   try {
     if (avatarFile) {
       const extension = profileAvatarMimeTypes.get(avatarFile.type);
@@ -2715,6 +2730,7 @@ profileForm.addEventListener("submit", async (event) => {
     }
 
     activeProfile = data;
+    profileSaved = true;
     if (profileAvatarPreviewUrl) {
       URL.revokeObjectURL(profileAvatarPreviewUrl);
       profileAvatarPreviewUrl = "";
@@ -2724,10 +2740,14 @@ profileForm.addEventListener("submit", async (event) => {
     updateAccountButton();
     let saveMessage = "Profil berhasil disimpan.";
     if (uploadedAvatarPath && previousAvatarPath) {
-      const { error: removeError } = await supabaseClient.storage
-        .from("profile-avatars")
-        .remove([previousAvatarPath]);
-      if (removeError) {
+      try {
+        const { error: removeError } = await supabaseClient.storage
+          .from("profile-avatars")
+          .remove([previousAvatarPath]);
+        if (removeError) {
+          throw removeError;
+        }
+      } catch (removeError) {
         console.error("Foto profil lama tidak dapat dihapus.", removeError);
         saveMessage += " Foto lama belum dapat dihapus.";
       }
@@ -2735,7 +2755,7 @@ profileForm.addEventListener("submit", async (event) => {
     setAuthStatus(profileStatus, saveMessage, saveMessage !== "Profil berhasil disimpan.");
   } catch (error) {
     console.error("Perubahan profil gagal disimpan.", error);
-    if (uploadedAvatarPath) {
+    if (uploadedAvatarPath && !profileSaved) {
       const { error: removeError } = await supabaseClient.storage
         .from("profile-avatars")
         .remove([uploadedAvatarPath]);
