@@ -14,12 +14,12 @@
   <link
     href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap"
     rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20261101-editor-diagnostics-2" />
+  <link rel="stylesheet" href="styles.css?v=20261102-profile-avatar" />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/acorn@8.15.0/dist/acorn.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/css-tree@3.1.0/dist/csstree.min.js" defer></script>
   <script src="auth-config.js" defer></script>
-  <script src="app.js?v=20261102-discover-signup" defer></script>
+  <script src="app.js?v=20261102-profile-avatar" defer></script>
 </head>
 
 <body>
@@ -526,6 +526,14 @@ tombol.addEventListener("click", () =&gt; {
         <span>Lengkapi profilmu untuk menyelesaikan pendaftaran CodeKita.</span>
       </div>
       <form class="profile-form" id="profile-form">
+        <label for="profile-avatar-file">Foto profil</label>
+        <div class="profile-avatar-control">
+          <div class="profile-avatar-preview" id="profile-avatar-preview" aria-hidden="true">K</div>
+          <div class="profile-avatar-upload">
+            <input id="profile-avatar-file" name="avatar" type="file" accept="image/jpeg,image/png,image/webp" />
+            <p class="profile-field-hint">Pilih JPG, PNG, atau WebP. Maksimal 5 MB. Foto hanya dapat diakses akunmu.</p>
+          </div>
+        </div>
         <label for="profile-email">Email akun</label>
         <input id="profile-email" name="email" type="email" readonly />
         <p class="profile-field-hint">Email dikelola oleh penyedia login dan tidak dapat diubah di sini.</p>

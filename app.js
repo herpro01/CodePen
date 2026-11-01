@@ -1865,10 +1865,19 @@ const authDialogStatus = document.querySelector("#auth-dialog-status");
 const authSetupNote = document.querySelector("#auth-setup-note");
 const profileStatus = document.querySelector("#profile-status");
 const profileForm = document.querySelector("#profile-form");
+const profileAvatarFileInput = document.querySelector("#profile-avatar-file");
+const profileAvatarPreview = document.querySelector("#profile-avatar-preview");
 const authProviderButtons = [...document.querySelectorAll("[data-auth-provider]")];
+const profileAvatarMimeTypes = new Map([
+  ["image/jpeg", "jpg"],
+  ["image/png", "png"],
+  ["image/webp", "webp"],
+]);
+const maxProfileAvatarSize = 5 * 1024 * 1024;
 let supabaseClient = null;
 let activeAuthUser = null;
 let activeProfile = null;
+let profileAvatarPreviewUrl = "";
 
 function setAuthStatus(element, message, isError = false) {
   element.textContent = message;
@@ -1881,8 +1890,13 @@ function updateAccountButton() {
   const displayName = activeProfile?.display_name || activeAuthUser?.email || "";
   label.textContent = activeAuthUser ? displayName : "Profil";
   if (activeAuthUser) {
+    avatar.dataset.avatarPath = activeProfile?.avatar_path || "";
     avatar.textContent = displayName.trim().charAt(0).toLocaleUpperCase("id") || "K";
+    if (activeProfile?.avatar_path) {
+      void loadProfileAvatar(avatar, activeProfile.avatar_path);
+    }
   } else {
+    delete avatar.dataset.avatarPath;
     const icon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     icon.setAttribute("viewBox", "0 0 20 20");
     icon.setAttribute("aria-hidden", "true");
@@ -1900,6 +1914,62 @@ function updateAccountButton() {
     activeAuthUser ? `Profil ${displayName}` : "Profil — masuk atau daftar akun CodeKita",
   );
   accountButton.title = activeAuthUser ? "Buka profil akun" : "Profil — masuk atau daftar akun CodeKita";
+}
+
+async function loadProfileAvatar(element, path) {
+  if (!supabaseClient || !path) {
+    return;
+  }
+
+  try {
+    const { data, error } = await supabaseClient.storage
+      .from("profile-avatars")
+      .createSignedUrl(path, 3600);
+    if (error) {
+      throw error;
+    }
+    if (element.dataset.avatarPath !== path) {
+      return;
+    }
+    const image = document.createElement("img");
+    image.src = data.signedUrl;
+    image.alt = "";
+    image.setAttribute("aria-hidden", "true");
+    image.addEventListener("error", () => {
+      console.error("Foto profil gagal ditampilkan.");
+      element.textContent =
+        activeProfile?.display_name?.trim().charAt(0).toLocaleUpperCase("id") || "K";
+      if (!document.querySelector("#profile-view").hidden) {
+        setAuthStatus(profileStatus, "Foto profil tidak dapat ditampilkan. Coba muat ulang halaman.", true);
+      }
+    }, { once: true });
+    element.replaceChildren(image);
+  } catch (error) {
+    console.error("Foto profil tidak dapat dimuat.", error);
+    if (!document.querySelector("#profile-view").hidden) {
+      const message = error instanceof Error ? error.message : "kesalahan tidak diketahui";
+      setAuthStatus(profileStatus, `Foto profil tidak dapat dimuat: ${message}`, true);
+    }
+  }
+}
+
+function showProfileAvatarPreview(fileUrl, fallbackText = "K") {
+  profileAvatarPreview.replaceChildren();
+  profileAvatarPreview.textContent = fallbackText;
+  if (!fileUrl) {
+    return;
+  }
+
+  const image = document.createElement("img");
+  image.src = fileUrl;
+  image.alt = "";
+  image.addEventListener("error", () => {
+    console.error("Pratinjau foto profil gagal ditampilkan.");
+    profileAvatarPreview.replaceChildren();
+    profileAvatarPreview.textContent = "K";
+    setAuthStatus(profileStatus, "Pratinjau foto gagal ditampilkan. Coba pilih file lain.", true);
+  }, { once: true });
+  profileAvatarPreview.replaceChildren(image);
 }
 
 function setCloudSyncStatus(message, isError = false) {
@@ -2302,7 +2372,7 @@ function getSuggestedDisplayName(user) {
 }
 
 async function loadOrCreateProfile(user) {
-  const profileColumns = "id, display_name, bio, profile_completed, updated_at";
+  const profileColumns = "id, display_name, bio, avatar_path, profile_completed, updated_at";
   const { data, error } = await supabaseClient
     .from("profiles")
     .select(profileColumns)
@@ -2347,6 +2417,11 @@ function showProfile(user, profile) {
   document.querySelector("#profile-email").value = user.email || "Email tidak dibagikan oleh provider";
   document.querySelector("#profile-display-name").value = profile.display_name;
   document.querySelector("#profile-bio").value = profile.bio;
+  profileAvatarPreview.dataset.avatarPath = profile.avatar_path || "";
+  showProfileAvatarPreview("", profile.display_name.trim().charAt(0).toLocaleUpperCase("id") || "K");
+  if (profile.avatar_path) {
+    void loadProfileAvatar(profileAvatarPreview, profile.avatar_path);
+  }
   const onboarding = document.querySelector("#profile-onboarding");
   onboarding.hidden = profile.profile_completed;
   document.querySelector("#profile-onboarding-title").textContent =
@@ -2354,6 +2429,13 @@ function showProfile(user, profile) {
 }
 
 function clearProfileForm() {
+  if (profileAvatarPreviewUrl) {
+    URL.revokeObjectURL(profileAvatarPreviewUrl);
+    profileAvatarPreviewUrl = "";
+  }
+  profileAvatarFileInput.value = "";
+  delete profileAvatarPreview.dataset.avatarPath;
+  showProfileAvatarPreview("");
   document.querySelector("#profile-email").value = "";
   document.querySelector("#profile-display-name").value = "";
   document.querySelector("#profile-bio").value = "";
@@ -2552,6 +2634,30 @@ for (const button of authProviderButtons) {
   button.addEventListener("click", () => startOAuthSignIn(button.dataset.authProvider));
 }
 
+profileAvatarFileInput.addEventListener("change", () => {
+  const file = profileAvatarFileInput.files?.[0];
+  if (!file) {
+    return;
+  }
+  if (!profileAvatarMimeTypes.has(file.type) || file.size > maxProfileAvatarSize) {
+    profileAvatarFileInput.value = "";
+    setAuthStatus(
+      profileStatus,
+      "Pilih foto berformat JPG, PNG, atau WebP dengan ukuran maksimal 5 MB.",
+      true,
+    );
+    return;
+  }
+
+  if (profileAvatarPreviewUrl) {
+    URL.revokeObjectURL(profileAvatarPreviewUrl);
+  }
+  profileAvatarPreviewUrl = URL.createObjectURL(file);
+  profileAvatarPreview.dataset.avatarPath = "";
+  showProfileAvatarPreview(profileAvatarPreviewUrl);
+  setAuthStatus(profileStatus, "Foto dipilih. Simpan profil untuk menerapkan perubahan.");
+});
+
 profileForm.addEventListener("submit", async (event) => {
   event.preventDefault();
   if (!supabaseClient || !activeAuthUser) {
@@ -2561,36 +2667,82 @@ profileForm.addEventListener("submit", async (event) => {
 
   const displayName = document.querySelector("#profile-display-name").value.trim();
   const bio = document.querySelector("#profile-bio").value.trim();
+  const avatarFile = profileAvatarFileInput.files?.[0] || null;
   if (!displayName || displayName.length > 50 || bio.length > 240) {
     setAuthStatus(profileStatus, "Nama tampilan wajib diisi (maksimal 50 karakter); bio maksimal 240 karakter.", true);
+    return;
+  }
+  if (avatarFile && (!profileAvatarMimeTypes.has(avatarFile.type) || avatarFile.size > maxProfileAvatarSize)) {
+    setAuthStatus(profileStatus, "Pilih foto berformat JPG, PNG, atau WebP dengan ukuran maksimal 5 MB.", true);
     return;
   }
 
   const saveButton = document.querySelector("#profile-save-button");
   saveButton.disabled = true;
   setAuthStatus(profileStatus, "Menyimpan profil…");
+  let uploadedAvatarPath = "";
   try {
+    if (avatarFile) {
+      const extension = profileAvatarMimeTypes.get(avatarFile.type);
+      uploadedAvatarPath = `${activeAuthUser.id}/${crypto.randomUUID()}.${extension}`;
+      const { error: uploadError } = await supabaseClient.storage
+        .from("profile-avatars")
+        .upload(uploadedAvatarPath, avatarFile, {
+          cacheControl: "3600",
+          contentType: avatarFile.type,
+          upsert: false,
+        });
+      if (uploadError) {
+        throw uploadError;
+      }
+    }
+
+    const previousAvatarPath = activeProfile?.avatar_path || null;
     const { data, error } = await supabaseClient
       .from("profiles")
       .update({
         display_name: displayName,
         bio,
+        avatar_path: uploadedAvatarPath || previousAvatarPath,
         profile_completed: true,
         updated_at: new Date().toISOString(),
       })
       .eq("id", activeAuthUser.id)
-      .select("id, display_name, bio, profile_completed, updated_at")
+      .select("id, display_name, bio, avatar_path, profile_completed, updated_at")
       .single();
     if (error) {
       throw error;
     }
 
     activeProfile = data;
+    if (profileAvatarPreviewUrl) {
+      URL.revokeObjectURL(profileAvatarPreviewUrl);
+      profileAvatarPreviewUrl = "";
+    }
+    profileAvatarFileInput.value = "";
     showProfile(activeAuthUser, activeProfile);
     updateAccountButton();
-    setAuthStatus(profileStatus, "Profil berhasil disimpan.");
+    let saveMessage = "Profil berhasil disimpan.";
+    if (uploadedAvatarPath && previousAvatarPath) {
+      const { error: removeError } = await supabaseClient.storage
+        .from("profile-avatars")
+        .remove([previousAvatarPath]);
+      if (removeError) {
+        console.error("Foto profil lama tidak dapat dihapus.", removeError);
+        saveMessage += " Foto lama belum dapat dihapus.";
+      }
+    }
+    setAuthStatus(profileStatus, saveMessage, saveMessage !== "Profil berhasil disimpan.");
   } catch (error) {
     console.error("Perubahan profil gagal disimpan.", error);
+    if (uploadedAvatarPath) {
+      const { error: removeError } = await supabaseClient.storage
+        .from("profile-avatars")
+        .remove([uploadedAvatarPath]);
+      if (removeError) {
+        console.error("Foto profil yang gagal disimpan tidak dapat dibersihkan.", removeError);
+      }
+    }
     const message = error instanceof Error ? error.message : "kesalahan tidak diketahui";
     setAuthStatus(profileStatus, `Profil gagal disimpan: ${message}`, true);
   } finally {
