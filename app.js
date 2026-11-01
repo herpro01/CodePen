@@ -281,8 +281,15 @@ function enterWebsite() {
   window.setTimeout(() => {
     welcomeScreen.hidden = true;
     welcomeScreen.classList.remove("is-leaving");
-    showView("discover");
+    navigateToDiscover();
   }, transitionDuration);
+}
+
+function navigateToDiscover() {
+  showView("discover");
+  if (!activeAuthUser) {
+    openAccount();
+  }
 }
 
 function showWelcome() {
@@ -1179,7 +1186,7 @@ for (const button of document.querySelectorAll("[data-show-learning]")) {
 }
 
 for (const button of document.querySelectorAll("[data-show-discover]")) {
-  button.addEventListener("click", () => showView("discover"));
+  button.addEventListener("click", navigateToDiscover);
 }
 
 for (const button of document.querySelectorAll("[data-open-account]")) {
