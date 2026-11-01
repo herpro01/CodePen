@@ -1,6 +1,6 @@
 # Mengaktifkan akun KodePen
 
-Fitur akun dan database project memakai Supabase Auth, Database, serta REST API yang dihasilkan Supabase (paket Free). Pengunjung yang memilih **Jelajahi** akan diminta daftar atau masuk dengan Google atau GitHub. Akun dibuat otomatis saat seseorang pertama kali masuk; login berikutnya menggunakan akun yang sama. Pengguna baru diarahkan ke profil untuk melengkapi nama tampilan dan bio. Tidak perlu membuat server API berbayar terpisah.
+Fitur akun dan database project memakai Supabase Auth, Database, serta REST API yang dihasilkan Supabase (paket Free). Pengunjung yang memilih **Jelajahi** atau mulai membuat project akan diminta daftar atau masuk dengan Google atau GitHub. Akun dibuat otomatis saat seseorang pertama kali masuk; login berikutnya menggunakan akun yang sama. Pengguna baru diarahkan ke profil untuk melengkapi nama tampilan dan bio. Tidak perlu membuat server API berbayar terpisah.
 
 ## 1. Buat project Supabase dan tabel profil
 

@@ -1173,6 +1173,11 @@ function startNewProject(title = "Website Pertamaku") {
 
 for (const button of document.querySelectorAll("[data-show-editor]")) {
   button.addEventListener("click", () => {
+    if (!activeAuthUser) {
+      openAccount();
+      return;
+    }
+
     if (button.dataset.navView === "editor") {
       showView("editor");
     } else {
