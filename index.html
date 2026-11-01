@@ -15,8 +15,10 @@
       href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="styles.css?v=20261101-supabase-cloud-sync" />
+    <link rel="stylesheet" href="styles.css?v=20261101-editor-diagnostics-2" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/acorn@8.15.0/dist/acorn.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/css-tree@3.1.0/dist/csstree.min.js" defer></script>
     <script src="auth-config.js" defer></script>
     <script src="app.js" defer></script>
   </head>
@@ -528,7 +530,7 @@ tombol.addEventListener("click", () =&gt; {
         <div>
           <div class="eyebrow"><span class="eyebrow-line"></span> RUANG BERMAIN WEB</div>
           <h1 id="workspace-title">Ide kecil, jadi sesuatu yang nyata.</h1>
-          <p>Tulis kode di sebelah kiri. Hasilnya langsung hidup di sebelah kanan.</p>
+          <p>Tulis kode di sebelah kiri. Jika ada kesalahan sintaks, barisnya ditandai merah.</p>
         </div>
         <div class="heading-note"><span class="sparkle" aria-hidden="true">✳</span> Coba ubah kodenya!</div>
       </section>
@@ -546,6 +548,7 @@ tombol.addEventListener("click", () =&gt; {
             </div>
             <div class="editor-body">
               <div class="line-numbers" id="html-lines" aria-hidden="true"></div>
+              <div class="editor-code-highlight" id="html-highlight" aria-hidden="true"><pre></pre></div>
               <textarea id="html-editor" class="code-editor" aria-label="Editor kode HTML" spellcheck="false" autocapitalize="off" autocomplete="off"></textarea>
             </div>
           </section>
@@ -561,6 +564,7 @@ tombol.addEventListener("click", () =&gt; {
             </div>
             <div class="editor-body">
               <div class="line-numbers" id="css-lines" aria-hidden="true"></div>
+              <div class="editor-code-highlight" id="css-highlight" aria-hidden="true"><pre></pre></div>
               <textarea id="css-editor" class="code-editor" aria-label="Editor kode CSS" spellcheck="false" autocapitalize="off" autocomplete="off"></textarea>
             </div>
           </section>
@@ -576,6 +580,7 @@ tombol.addEventListener("click", () =&gt; {
             </div>
             <div class="editor-body">
               <div class="line-numbers" id="js-lines" aria-hidden="true"></div>
+              <div class="editor-code-highlight" id="js-highlight" aria-hidden="true"><pre></pre></div>
               <textarea id="js-editor" class="code-editor" aria-label="Editor kode JavaScript" spellcheck="false" autocapitalize="off" autocomplete="off"></textarea>
             </div>
           </section>

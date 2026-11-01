@@ -266,6 +266,9 @@ let activeProjectId = "";
 let activeProjectFileHandle = null;
 let projectFileWriteQueue = Promise.resolve();
 let completedChallenges = new Set();
+const editorDiagnostics = Object.fromEntries(editorIds.map((language) => [language, []]));
+const runtimeDiagnostics = { js: [] };
+const diagnosticsTimers = {};
 let runTimer;
 let saveTimer;
 
@@ -335,7 +338,8 @@ function createProjectId() {
 function setEditorCode(code) {
   for (const language of editorIds) {
     editors[language].value = code[language];
-    updateLineNumbers(language);
+    runtimeDiagnostics.js = [];
+    validateEditorSource(language);
   }
 }
 
@@ -581,10 +585,293 @@ function setAccountStorageScope(scope) {
 function updateLineNumbers(language) {
   const editor = editors[language];
   const lineCount = editor.value.split("\n").length;
-  document.querySelector(`#${language}-lines`).textContent = Array.from(
-    { length: lineCount },
-    (_, index) => index + 1,
-  ).join("\n");
+  const diagnostics = [...editorDiagnostics[language], ...(language === "js" ? runtimeDiagnostics.js : [])];
+  const errorsByLine = new Map();
+  for (const diagnostic of diagnostics) {
+    const messages = errorsByLine.get(diagnostic.line) || [];
+    if (!messages.includes(diagnostic.message)) {
+      messages.push(diagnostic.message);
+    }
+    errorsByLine.set(diagnostic.line, messages);
+  }
+
+  const lineNumbers = document.querySelector(`#${language}-lines`);
+  const highlightedCode = document.querySelector(`#${language}-highlight pre`);
+  const sourceLines = editor.value.split("\n");
+  const numberFragment = document.createDocumentFragment();
+  const codeFragment = document.createDocumentFragment();
+
+  for (let index = 0; index < lineCount; index += 1) {
+    const lineNumber = index + 1;
+    const errorMessages = errorsByLine.get(lineNumber) || [];
+    const number = document.createElement("span");
+    number.textContent = String(lineNumber);
+    const codeLine = document.createElement("span");
+    codeLine.textContent = sourceLines[index] || "\u00a0";
+
+    if (errorMessages.length > 0) {
+      const description = errorMessages.join(" · ");
+      number.classList.add("has-error");
+      number.title = description;
+      codeLine.classList.add("has-error");
+      codeLine.title = description;
+    }
+
+    numberFragment.append(number);
+    codeFragment.append(codeLine);
+  }
+
+  lineNumbers.replaceChildren(numberFragment);
+  highlightedCode.replaceChildren(codeFragment);
+  editor.setAttribute("aria-invalid", String(errorsByLine.size > 0));
+  editor.title = errorsByLine.size > 0
+    ? [...errorsByLine].map(([line, messages]) => `Baris ${line}: ${messages.join(" · ")}`).join("\n")
+    : "";
+}
+
+function getSourceLine(source, offset) {
+  const boundedOffset = Math.max(0, Math.min(offset, source.length));
+  let line = 1;
+  for (let index = 0; index < boundedOffset; index += 1) {
+    if (source[index] === "\n") {
+      line += 1;
+    }
+  }
+  return line;
+}
+
+function validateHtmlSource(source) {
+  const diagnostics = [];
+  const stack = [];
+  const voidElements = new Set([
+    "area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "param",
+    "source", "track", "wbr",
+  ]);
+  const knownElements = new Set([
+    "a", "abbr", "address", "area", "article", "aside", "audio", "b", "base", "bdi", "bdo",
+    "blockquote", "body", "br", "button", "canvas", "caption", "center", "cite", "code", "col",
+    "colgroup", "data", "datalist", "dd", "del", "details", "dfn", "dialog", "dir", "div", "dl",
+    "dt", "em", "embed", "fieldset", "figcaption", "figure", "font", "footer", "form", "h1", "h2",
+    "h3", "h4", "h5", "h6", "head", "header", "hgroup", "hr", "html", "i", "iframe", "img",
+    "input", "ins", "kbd", "label", "legend", "li", "link", "main", "map", "mark", "menu", "meta",
+    "meter", "nav", "noframes", "noscript", "object", "ol", "optgroup", "option", "output", "p",
+    "param", "picture", "pre", "progress", "q", "rp", "rt", "ruby", "s", "samp", "script", "search",
+    "section", "select", "slot", "small", "source", "span", "strike", "strong", "style", "sub",
+    "summary", "sup", "svg", "table", "tbody", "td", "template", "textarea", "tfoot", "th", "thead",
+    "time", "title", "tr", "track", "tt", "u", "ul", "var", "video", "wbr", "g", "path", "rect",
+    "circle", "ellipse", "line", "polygon", "polyline", "defs", "lineargradient", "radialgradient",
+    "stop", "use", "symbol", "marker", "pattern", "mask", "clippath", "foreignobject", "text",
+    "tspan",
+  ]);
+  const optionalEndElements = new Set(["html", "head", "body"]);
+  const optionalCloseOnStart = {
+    address: ["p"], article: ["p"], aside: ["p"], blockquote: ["p"], details: ["p"],
+    div: ["p"], dl: ["p"], fieldset: ["p"], footer: ["p"], form: ["p"], h1: ["p"],
+    h2: ["p"], h3: ["p"], h4: ["p"], h5: ["p"], h6: ["p"], header: ["p"],
+    hr: ["p"], main: ["p"], menu: ["p"], nav: ["p"], ol: ["p"], p: ["p"],
+    pre: ["p"], section: ["p"], table: ["p"], ul: ["p"], li: ["li"],
+    dt: ["dt", "dd"], dd: ["dt", "dd"], option: ["option"], optgroup: ["option", "optgroup"],
+    thead: ["thead", "tbody", "tfoot"], tbody: ["thead", "tbody", "tfoot"],
+    tfoot: ["thead", "tbody", "tfoot"], tr: ["tr"], td: ["td", "th"], th: ["td", "th"],
+  };
+  let offset = 0;
+
+  function popOptionalElements(names) {
+    const top = stack[stack.length - 1];
+    if (top && names.includes(top.name)) {
+      stack.pop();
+    }
+  }
+
+  while (offset < source.length) {
+    const start = source.indexOf("<", offset);
+    if (start === -1) {
+      break;
+    }
+
+    if (source.startsWith("<!--", start)) {
+      const commentEnd = source.indexOf("-->", start + 4);
+      if (commentEnd === -1) {
+        diagnostics.push({ line: getSourceLine(source, start), message: "Komentar HTML belum ditutup dengan -->." });
+        break;
+      }
+      offset = commentEnd + 3;
+      continue;
+    }
+
+    if (!/^<\/?[A-Za-z!]/.test(source.slice(start, start + 3))) {
+      offset = start + 1;
+      continue;
+    }
+
+    let quote = "";
+    let end = start + 1;
+    for (; end < source.length; end += 1) {
+      const character = source[end];
+      if (quote) {
+        if (character === quote) {
+          quote = "";
+        }
+      } else if (character === '"' || character === "'") {
+        quote = character;
+      } else if (character === ">") {
+        break;
+      }
+    }
+    if (end >= source.length) {
+      diagnostics.push({
+        line: getSourceLine(source, start),
+        message: quote ? "Atribut HTML memiliki tanda kutip yang belum ditutup." : "Tag HTML belum ditutup dengan >.",
+      });
+      break;
+    }
+
+    const tag = source.slice(start, end + 1);
+    const match = tag.match(/^<\s*(\/?)\s*([A-Za-z][\w:-]*)/);
+    offset = end + 1;
+    if (!match || tag.startsWith("<!")) {
+      continue;
+    }
+
+    const closing = Boolean(match[1]);
+    const name = match[2].toLocaleLowerCase("en");
+    const line = getSourceLine(source, start);
+    if (!knownElements.has(name) && !name.includes("-")) {
+      diagnostics.push({
+        line,
+        message: `Tag <${name}> tidak dikenal. Periksa kembali ejaan tag HTML.`,
+      });
+    }
+    if (closing) {
+      if (optionalEndElements.has(name)) {
+        continue;
+      }
+      const matchingIndex = stack.map((item) => item.name).lastIndexOf(name);
+      if (matchingIndex === -1) {
+        diagnostics.push({ line, message: `Tag penutup </${name}> tidak memiliki tag pembuka.` });
+      } else {
+        for (let index = stack.length - 1; index > matchingIndex; index -= 1) {
+          diagnostics.push({
+            line: stack[index].line,
+            message: `Tag <${stack[index].name}> belum ditutup sebelum </${name}>.`,
+          });
+        }
+        stack.length = matchingIndex;
+      }
+
+      if (name === "script" || name === "style") {
+        const closingPattern = new RegExp(`<\\s*\\/\\s*${name}\\s*>`, "ig");
+        closingPattern.lastIndex = offset;
+        const closingMatch = closingPattern.exec(source);
+        if (closingMatch) {
+          offset = closingPattern.lastIndex;
+        }
+      }
+      continue;
+    }
+
+    if (name === "html" || name === "head" || name === "body") {
+      continue;
+    }
+    popOptionalElements(optionalCloseOnStart[name] || []);
+    if (!voidElements.has(name) && !/\/\s*>$/.test(tag)) {
+      stack.push({ name, line });
+    }
+    if (name === "script" || name === "style") {
+      const closingPattern = new RegExp(`<\\s*\\/\\s*${name}\\s*>`, "ig");
+      closingPattern.lastIndex = offset;
+      const closingMatch = closingPattern.exec(source);
+      if (closingMatch) {
+        offset = closingPattern.lastIndex;
+        const rawElementIndex = stack.map((item) => item.name).lastIndexOf(name);
+        if (rawElementIndex !== -1) {
+          stack.length = rawElementIndex;
+        }
+      }
+    }
+  }
+
+  for (const unclosedTag of stack) {
+    diagnostics.push({ line: unclosedTag.line, message: `Tag <${unclosedTag.name}> belum memiliki tag penutup.` });
+  }
+  return diagnostics;
+}
+
+function validateCssSource(source) {
+  const diagnostics = [];
+  const cssTree = window.csstree;
+  if (!cssTree) {
+    return diagnostics;
+  }
+
+  function addParseError(error) {
+    const offset = Number.isInteger(error.offset) ? error.offset : 0;
+    diagnostics.push({
+      line: Number.isInteger(error.line) ? error.line : getSourceLine(source, offset),
+      message: error.message || "Sintaks CSS tidak valid.",
+    });
+  }
+
+  try {
+    const stylesheet = cssTree.parse(source, { positions: true, onParseError: addParseError });
+    cssTree.walk(stylesheet, (node) => {
+      if (
+        node.type !== "Declaration" ||
+        node.property.startsWith("--") ||
+        node.property.startsWith("-") ||
+        typeof window.CSS?.supports !== "function"
+      ) {
+        return;
+      }
+
+      const value = cssTree.generate(node.value);
+      if (!window.CSS.supports(node.property, value)) {
+        diagnostics.push({
+          line: node.loc?.start.line || 1,
+          message: `Properti atau nilai CSS tidak dikenali: ${node.property}: ${value}.`,
+        });
+      }
+    });
+  } catch (error) {
+    addParseError(error);
+  }
+  return diagnostics;
+}
+
+function validateJavaScriptSource(source) {
+  const acorn = window.acorn;
+  if (!acorn) {
+    return [];
+  }
+
+  try {
+    acorn.parse(source, { ecmaVersion: "latest", sourceType: "script", allowHashBang: true });
+    return [];
+  } catch (error) {
+    return [{
+      line: error.loc?.line || getSourceLine(source, error.pos || 0),
+      message: error.message || "Sintaks JavaScript tidak valid.",
+    }];
+  }
+}
+
+function validateEditorSource(language) {
+  const source = editors[language].value;
+  if (language === "html") {
+    editorDiagnostics.html = validateHtmlSource(source);
+  } else if (language === "css") {
+    editorDiagnostics.css = validateCssSource(source);
+  } else {
+    editorDiagnostics.js = validateJavaScriptSource(source);
+  }
+  updateLineNumbers(language);
+}
+
+function scheduleEditorValidation(language) {
+  window.clearTimeout(diagnosticsTimers[language]);
+  diagnosticsTimers[language] = window.setTimeout(() => {
+    validateEditorSource(language);
+  }, 180);
 }
 
 function renderPreview() {
@@ -596,7 +883,12 @@ function renderPreview() {
     : document.querySelector("#editor-topbar .project-title").textContent);
   document.querySelector("#preview-page-title").textContent = previewTitle.trim() || "Tanpa judul";
   const errorReporter = `window.addEventListener("error", (event) => {
-  window.parent.postMessage({ type: "kodelab-preview-error", message: event.message || "Kesalahan JavaScript" }, "*");
+  window.parent.postMessage({
+    type: "kodelab-preview-error",
+    message: event.message || "Kesalahan JavaScript",
+    line: event.lineno || 0,
+    source: event.filename || ""
+  }, "*");
 });`;
 
   let documentContent;
@@ -611,7 +903,7 @@ function renderPreview() {
     previewDocument.body.append(errorReporterElement);
 
     const userScriptElement = previewDocument.createElement("script");
-    userScriptElement.textContent = js.replace(/<\/script/gi, "<\\/script");
+    userScriptElement.textContent = `${js.replace(/<\/script/gi, "<\\/script")}\n//# sourceURL=kodepen-user-script.js`;
     previewDocument.body.append(userScriptElement);
     documentContent = `<!doctype html>\n${previewDocument.documentElement.outerHTML}`;
   } else {
@@ -628,7 +920,9 @@ function renderPreview() {
 <body>
 ${html}
 <script>${errorReporter}<\/script>
-<script>${js.replace(/<\/script/gi, "<\\/script")}<\/script>
+<script>${js.replace(/<\/script/gi, "<\\/script")}
+//# sourceURL=kodepen-user-script.js
+<\/script>
 </body>
 </html>`;
   }
@@ -674,20 +968,35 @@ window.addEventListener("message", (event) => {
     return;
   }
 
+  const runtimeLine = Number.isInteger(event.data.line) ? event.data.line : 0;
+  if (
+    runtimeLine > 0 &&
+    (!event.data.source || event.data.source.includes("kodepen-user-script.js")) &&
+    runtimeLine <= editors.js.value.split("\n").length
+  ) {
+    runtimeDiagnostics.js = [{ line: runtimeLine, message: event.data.message }];
+    updateLineNumbers("js");
+    setPreviewStatus(`JavaScript baris ${runtimeLine}: ${event.data.message}`, true);
+    return;
+  }
   setPreviewStatus(`JavaScript: ${event.data.message}`, true);
 });
 
 for (const language of editorIds) {
   editors[language].value = starterCode[language];
-  updateLineNumbers(language);
+  validateEditorSource(language);
 
   editors[language].addEventListener("input", () => {
+    runtimeDiagnostics.js = [];
     updateLineNumbers(language);
+    scheduleEditorValidation(language);
     scheduleUpdate();
   });
 
   editors[language].addEventListener("scroll", () => {
     document.querySelector(`#${language}-lines`).scrollTop = editors[language].scrollTop;
+    document.querySelector(`#${language}-highlight pre`).style.transform =
+      `translate(${-editors[language].scrollLeft}px, ${-editors[language].scrollTop}px)`;
   });
 
   editors[language].addEventListener("keydown", (event) => {
@@ -695,7 +1004,9 @@ for (const language of editorIds) {
       event.preventDefault();
       const { selectionStart, selectionEnd, value } = editors[language];
       editors[language].setRangeText("  ", selectionStart, selectionEnd, "end");
+      runtimeDiagnostics.js = [];
       updateLineNumbers(language);
+      scheduleEditorValidation(language);
       scheduleUpdate();
     }
 
