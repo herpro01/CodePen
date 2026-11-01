@@ -1,337 +1,426 @@
 <!doctype html>
 <html lang="id">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="Ruang belajar coding web interaktif. Tulis HTML, CSS, dan JavaScript lalu lihat hasilnya secara langsung."
-    />
-    <meta name="theme-color" content="#101116" />
-    <title>KodePen — ruang bermain web</title>
-    <link rel="icon" href="images/Logo%20CP.ico?v=20261102" type="image/x-icon" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="styles.css?v=20261101-editor-diagnostics-2" />
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/acorn@8.15.0/dist/acorn.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/css-tree@3.1.0/dist/csstree.min.js" defer></script>
-    <script src="auth-config.js" defer></script>
-    <script src="app.js?v=20261102-discover-signup" defer></script>
-  </head>
-  <body>
-    <section class="welcome-screen" id="welcome-screen" role="dialog" aria-modal="true" aria-labelledby="welcome-title">
-      <div class="welcome-ambient ambient-one" aria-hidden="true"></div>
-      <div class="welcome-ambient ambient-two" aria-hidden="true"></div>
-      <div class="welcome-grid" aria-hidden="true"></div>
-      <div class="welcome-orbit orbit-outer" aria-hidden="true"></div>
-      <div class="welcome-orbit orbit-inner" aria-hidden="true"></div>
-      <div class="welcome-content">
-        <div class="welcome-mark" aria-hidden="true">&lt;<span>/</span>&gt;</div>
-        <p class="welcome-eyebrow"><span></span> RUANG KREATIF UNTUK WEB <span></span></p>
-        <p class="welcome-greeting">Selamat datang di</p>
-        <h1 class="welcome-title" id="welcome-title">Kode<span>Pen</span><i>.</i></h1>
-        <p class="welcome-description">Tempat ide bertemu kode.<br />Mulai dari baris pertama, ciptakan sesuatu yang luar biasa.</p>
-        <button class="welcome-enter" id="welcome-enter" type="button">
-          <span>Mulai menjelajah</span><span class="welcome-enter-arrow" aria-hidden="true">↗</span>
-        </button>
-        <p class="welcome-creator">DICIPTAKAN DENGAN <span aria-hidden="true">♥</span> OLEH <strong>HERIK</strong></p>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="Ruang belajar coding web interaktif. Tulis HTML, CSS, dan JavaScript lalu lihat hasilnya secara langsung." />
+  <meta name="theme-color" content="#101116" />
+  <title>KodePen</title>
+  <link rel="icon" href="images/Logo%20CP.ico?v=20261102" type="image/x-icon" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=20261101-editor-diagnostics-2" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/acorn@8.15.0/dist/acorn.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/css-tree@3.1.0/dist/csstree.min.js" defer></script>
+  <script src="auth-config.js" defer></script>
+  <script src="app.js?v=20261102-discover-signup" defer></script>
+</head>
+
+<body>
+  <section class="welcome-screen" id="welcome-screen" role="dialog" aria-modal="true" aria-labelledby="welcome-title">
+    <div class="welcome-ambient ambient-one" aria-hidden="true"></div>
+    <div class="welcome-ambient ambient-two" aria-hidden="true"></div>
+    <div class="welcome-grid" aria-hidden="true"></div>
+    <div class="welcome-orbit orbit-outer" aria-hidden="true"></div>
+    <div class="welcome-orbit orbit-inner" aria-hidden="true"></div>
+    <div class="welcome-content">
+      <div class="welcome-mark" aria-hidden="true">&lt;<span>/</span>&gt;</div>
+      <p class="welcome-eyebrow"><span></span> RUANG KREATIF UNTUK WEB <span></span></p>
+      <p class="welcome-greeting">Selamat datang di</p>
+      <h1 class="welcome-title" id="welcome-title">Kode<span>Pen</span><i>.</i></h1>
+      <p class="welcome-description">Tempat ide bertemu kode.<br />Mulai dari baris pertama, ciptakan sesuatu yang luar
+        biasa.</p>
+      <button class="welcome-enter" id="welcome-enter" type="button">
+        <span>Mulai menjelajah</span><span class="welcome-enter-arrow" aria-hidden="true">↗</span>
+      </button>
+      <p class="welcome-creator">DICIPTAKAN DENGAN <span aria-hidden="true">♥</span> OLEH <strong>HERIK</strong></p>
+    </div>
+    <div class="welcome-side-note welcome-side-left" aria-hidden="true">HTML <span>+</span> CSS <span>+</span> JS</div>
+    <div class="welcome-side-note welcome-side-right" aria-hidden="true">BUILD YOUR NEXT IDEA</div>
+    <div class="welcome-bottom-line" aria-hidden="true"><span></span></div>
+  </section>
+
+  <header class="topbar discovery-topbar" id="discovery-topbar" hidden inert>
+    <a class="brand" href="#" aria-label="KodePen beranda" data-show-discover>
+      <span class="brand-mark" aria-hidden="true">&lt;/&gt;</span>
+      <span>Kode<span class="brand-light">Pen</span></span>
+    </a>
+    <nav class="main-nav" aria-label="Navigasi utama">
+      <button class="main-nav-link is-active" type="button" data-show-discover
+        data-nav-view="discover">Jelajahi</button>
+      <button class="main-nav-link" type="button" data-show-learning data-nav-view="learning">Belajar</button>
+      <button class="main-nav-link" type="button" data-show-editor data-nav-view="editor">Editor</button>
+    </nav>
+    <label class="site-search">
+      <svg viewBox="0 0 20 20" aria-hidden="true">
+        <circle cx="8.7" cy="8.7" r="5.6" />
+        <path d="m13 13 4 4" />
+      </svg>
+      <input id="pen-search" type="search" placeholder="Cari karya, tag, atau kreator..."
+        aria-label="Cari karya, tag, atau kreator" />
+      <kbd>/</kbd>
+    </label>
+    <button class="button button-run create-button" type="button" data-show-editor>
+      <span aria-hidden="true">＋</span> Buat project
+    </button>
+    <button class="button button-quiet account-button" id="account-button" type="button">
+      <span class="account-avatar" aria-hidden="true">
+        <svg viewBox="0 0 20 20" focusable="false">
+          <circle cx="10" cy="6.5" r="3.1" />
+          <path d="M3.8 17a6.2 6.2 0 0 1 12.4 0" />
+        </svg>
+      </span>
+      <span class="account-button-label">Profil</span>
+    </button>
+  </header>
+
+  <div class="discovery-layout" id="discovery-view" hidden inert>
+    <aside class="sidebar" aria-label="Jelajahi">
+      <div class="sidebar-label">JELAJAHI</div>
+      <button class="sidebar-link is-active" type="button" data-category="all">
+        <span class="sidebar-icon">✳</span> Trending <span class="sidebar-arrow">↗</span>
+      </button>
+      <button class="sidebar-link" type="button" data-category="latest">
+        <span class="sidebar-icon">◷</span> Terbaru
+      </button>
+      <button class="sidebar-link" type="button" data-category="popular">
+        <span class="sidebar-icon">↗</span> Paling disukai
+      </button>
+
+      <div class="sidebar-label sidebar-label-spaced">TEMUKAN INSPIRASI</div>
+      <button class="sidebar-link" type="button" data-tag="CSS Art"><span class="tag-swatch swatch-lilac"></span> CSS
+        Art</button>
+      <button class="sidebar-link" type="button" data-tag="Animasi"><span class="tag-swatch swatch-orange"></span>
+        Animasi</button>
+      <button class="sidebar-link" type="button" data-tag="UI Design"><span class="tag-swatch swatch-blue"></span> UI
+        Design</button>
+      <button class="sidebar-link" type="button" data-tag="Eksperimen"><span class="tag-swatch swatch-green"></span>
+        Eksperimen</button>
+
+      <div class="sidebar-note">
+        <span class="sidebar-note-icon">✳</span>
+        <strong>Punya ide?</strong>
+        <p>Mulai dari HTML, CSS, dan JavaScript-mu sendiri.</p>
+        <button type="button" data-show-editor>Buka editor <span aria-hidden="true">↗</span></button>
       </div>
-      <div class="welcome-side-note welcome-side-left" aria-hidden="true">HTML <span>+</span> CSS <span>+</span> JS</div>
-      <div class="welcome-side-note welcome-side-right" aria-hidden="true">BUILD YOUR NEXT IDEA</div>
-      <div class="welcome-bottom-line" aria-hidden="true"><span></span></div>
+      <div class="sidebar-footer">DIBUAT UNTUK BELAJAR <span>♥</span></div>
+    </aside>
+
+    <main class="discover-main">
+      <section class="discover-hero" aria-labelledby="discover-title">
+        <div class="hero-copy">
+          <div class="eyebrow"><span class="eyebrow-line"></span> IDE SEGAR, SETIAP HARI</div>
+          <h1 id="discover-title">Temukan. Pelajari.<br /><span>Buat versimu.</span></h1>
+          <p>Jelajahi kreasi web, temukan inspirasi baru, lalu kembangkan dengan caramu sendiri.</p>
+          <button class="button button-run hero-cta" type="button" data-show-editor>Mulai membuat <span
+              aria-hidden="true">↗</span></button>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <div class="hero-art-orbit orbit-one"></div>
+          <div class="hero-art-orbit orbit-two"></div>
+          <div class="hero-art-card hero-card-back"><span>CSS</span><i></i><i></i><i></i></div>
+          <div class="hero-art-card hero-card-front"><span class="hero-code-mark">&lt;/&gt;</span><span
+              class="hero-art-label">IDE JADI NYATA</span></div>
+          <span class="hero-spark hero-spark-one">✳</span>
+          <span class="hero-spark hero-spark-two">✦</span>
+        </div>
+        <div class="hero-index"><span>01</span> / 03</div>
+      </section>
+
+      <section class="trending-section" aria-labelledby="trending-title">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow"><span class="eyebrow-line"></span> GALERI CONTOH KODEPEN</div>
+            <h2 id="trending-title">Inspirasi untuk dicoba <span class="trending-flame">↗</span></h2>
+            <p>Pelajari contoh project dan kembangkan di editor. Suka tersimpan di browser ini saja.</p>
+          </div>
+          <button class="sort-button" id="sort-button" type="button" data-sort="trending">Pilihan <span
+              aria-hidden="true">⌄</span></button>
+        </div>
+
+        <div class="category-row" role="group" aria-label="Filter karya">
+          <button class="category-chip is-active" type="button" data-filter="Semua">Semua karya</button>
+          <button class="category-chip" type="button" data-filter="CSS Art">CSS Art</button>
+          <button class="category-chip" type="button" data-filter="Animasi">Animasi</button>
+          <button class="category-chip" type="button" data-filter="UI Design">UI Design</button>
+          <button class="category-chip" type="button" data-filter="Eksperimen">Eksperimen</button>
+        </div>
+
+        <div class="pen-grid" id="pen-grid">
+          <article class="pen-card" data-demo="sunrise" data-tags="Animasi Eksperimen" data-likes="0">
+            <button class="pen-preview preview-sunrise" type="button" data-open-card
+              aria-label="Mulai project terinspirasi dari Sunrise Club">
+              <span class="sunrise-topline">SLOW MORNINGS CLUB <span>VOL. 01 — 2025</span></span>
+              <span class="sunrise-sun"></span>
+              <span class="sunrise-copy">take it<br />slow<span>.</span></span>
+              <span class="sunrise-caption">A little reminder to enjoy the moment.</span>
+              <span class="preview-corner">CSS</span>
+            </button>
+            <div class="pen-info">
+              <div class="pen-author-avatar avatar-sage">k</div>
+              <div class="pen-copy">
+                <h3>Sunrise Club — a slow morning</h3><span>Contoh KodePen · <b>Animasi</b></span>
+              </div>
+              <button class="like-button" type="button" aria-label="Sukai Sunrise Club"
+                aria-pressed="false"><span>♡</span> <b>0</b></button>
+            </div>
+          </article>
+
+          <article class="pen-card" data-demo="orbit" data-tags="CSS Art Eksperimen" data-likes="0">
+            <button class="pen-preview preview-orbit" type="button" data-open-card
+              aria-label="Mulai project terinspirasi dari Orbit No. 04">
+              <span class="orbit-label">AN EXPLORATION IN MOTION</span>
+              <span class="orbit-ring ring-a"></span><span class="orbit-ring ring-b"></span><span
+                class="orbit-ring ring-c"></span>
+              <span class="orbit-core"></span><span class="orbit-title">ORBIT<span>04</span></span>
+              <span class="preview-corner">CSS</span>
+            </button>
+            <div class="pen-info">
+              <div class="pen-author-avatar avatar-violet">k</div>
+              <div class="pen-copy">
+                <h3>Orbit No. 04 — pure CSS motion</h3><span>Contoh KodePen · <b>CSS Art</b></span>
+              </div>
+              <button class="like-button" type="button" aria-label="Sukai Orbit No. 04"
+                aria-pressed="false"><span>♡</span> <b>0</b></button>
+            </div>
+          </article>
+
+          <article class="pen-card" data-demo="playlist" data-tags="UI Design" data-likes="0">
+            <button class="pen-preview preview-playlist" type="button" data-open-card
+              aria-label="Mulai project terinspirasi dari Little Things playlist">
+              <span class="playlist-window"><span class="playlist-dots">● ● ●</span><span class="playlist-label">YOUR
+                  DAILY MIX</span><span class="playlist-art">♫</span><span
+                  class="playlist-title">little<br />things</span><span class="playlist-track">A soft playlist for a
+                  softer day</span><span class="playlist-play">▶</span></span>
+              <span class="preview-corner">HTML · CSS</span>
+            </button>
+            <div class="pen-info">
+              <div class="pen-author-avatar avatar-peach">k</div>
+              <div class="pen-copy">
+                <h3>Little Things — playlist card</h3><span>Contoh KodePen · <b>UI Design</b></span>
+              </div>
+              <button class="like-button" type="button" aria-label="Sukai Little Things"
+                aria-pressed="false"><span>♡</span> <b>0</b></button>
+            </div>
+          </article>
+
+          <article class="pen-card" data-demo="weather" data-tags="UI Design Eksperimen" data-likes="0">
+            <button class="pen-preview preview-weather" type="button" data-open-card
+              aria-label="Mulai project terinspirasi dari Weather">
+              <span class="weather-date">TUESDAY, 12 AUGUST</span><span class="weather-city">Yogyakarta <b>⌖</b></span>
+              <span class="weather-sun">☼</span><span class="weather-temp">27<span>°</span></span>
+              <span class="weather-state">A little cloudy, mostly lovely.</span><span class="weather-bottom">UV 3
+                <i></i> HUMIDITY 64%</span>
+              <span class="preview-corner">HTML · CSS</span>
+            </button>
+            <div class="pen-info">
+              <div class="pen-author-avatar avatar-blue">k</div>
+              <div class="pen-copy">
+                <h3>Weather, but make it soft</h3><span>Contoh KodePen · <b>UI Design</b></span>
+              </div>
+              <button class="like-button" type="button" aria-label="Sukai Weather" aria-pressed="false"><span>♡</span>
+                <b>0</b></button>
+            </div>
+          </article>
+
+          <article class="pen-card" data-demo="garden" data-tags="CSS Art" data-likes="0">
+            <button class="pen-preview preview-flower" type="button" data-open-card
+              aria-label="Mulai project terinspirasi dari A tiny garden">
+              <span class="flower-grid"></span><span class="flower-stem"></span><span class="flower-head">✿</span>
+              <span class="flower-caption">A TINY GARDEN<br /><i>made with CSS & care</i></span>
+              <span class="preview-corner">CSS ART</span>
+            </button>
+            <div class="pen-info">
+              <div class="pen-author-avatar avatar-green">k</div>
+              <div class="pen-copy">
+                <h3>A tiny garden made with CSS</h3><span>Contoh KodePen · <b>CSS Art</b></span>
+              </div>
+              <button class="like-button" type="button" aria-label="Sukai A tiny garden"
+                aria-pressed="false"><span>♡</span> <b>0</b></button>
+            </div>
+          </article>
+
+          <article class="pen-card" data-demo="loader" data-tags="Animasi Eksperimen" data-likes="0">
+            <button class="pen-preview preview-loader" type="button" data-open-card
+              aria-label="Mulai project terinspirasi dari Almost there">
+              <span class="loader-label">LOADING SOMETHING NICE</span><span class="loader-track"><i></i></span>
+              <span class="loader-number">78<span>%</span></span><span class="loader-caption">Good things take
+                time.</span>
+              <span class="preview-corner">ANIMATION</span>
+            </button>
+            <div class="pen-info">
+              <div class="pen-author-avatar avatar-amber">k</div>
+              <div class="pen-copy">
+                <h3>Almost there — a friendly loader</h3><span>Contoh KodePen · <b>Animasi</b></span>
+              </div>
+              <button class="like-button" type="button" aria-label="Sukai Almost there"
+                aria-pressed="false"><span>♡</span> <b>0</b></button>
+            </div>
+          </article>
+        </div>
+        <p class="empty-state" id="empty-state" hidden>Tidak ada karya yang cocok. Coba kata kunci atau kategori lain.
+        </p>
+        <button class="load-more-button" type="button" id="load-more" data-show-editor>Buat karya versimu <span
+            aria-hidden="true">↗</span></button>
+      </section>
+
+      <footer class="discover-footer">
+        <span>IDE BEBAS. KODE TERBUKA. <b>♥</b></span>
+        <span>DICIPTAKAN OLEH HERIK <i>·</i> HTML <i>+</i> CSS <i>+</i> JS</span>
+        <button type="button" data-show-welcome>Halaman sambutan <span aria-hidden="true">↗</span></button>
+      </footer>
+    </main>
+  </div>
+
+  <main class="learning-view" id="learning-view" hidden inert>
+    <section class="learning-hero" aria-labelledby="learning-title">
+      <div class="eyebrow"><span class="eyebrow-line"></span> PANDUAN UNTUK PEMULA</div>
+      <h1 id="learning-title" tabindex="-1">Kenalan dengan dunia web.</h1>
+      <p>Setiap website dimulai dari tiga bagian sederhana. Pelajari perannya, lalu coba sendiri di editor.</p>
+      <div class="learning-hero-actions">
+        <button class="button button-run" type="button" data-show-editor>Mulai praktik <span
+            aria-hidden="true">↗</span></button>
+        <span class="learning-reading-time"><span aria-hidden="true">◷</span> Bacaan singkat · 5 menit</span>
+      </div>
+      <div class="learning-hero-art" aria-hidden="true">
+        <div class="learn-float-card learn-float-html">&lt;html&gt;</div>
+        <div class="learn-float-card learn-float-css">#design</div>
+        <div class="learn-float-card learn-float-js">click( )</div>
+        <div class="learn-orbit"></div>
+        <div class="learn-orbit learn-orbit-small"></div>
+        <span class="learn-orbit-star">✳</span>
+      </div>
     </section>
 
-    <header class="topbar discovery-topbar" id="discovery-topbar" hidden inert>
-      <a class="brand" href="#" aria-label="KodePen beranda" data-show-discover>
-        <span class="brand-mark" aria-hidden="true">&lt;/&gt;</span>
-        <span>Kode<span class="brand-light">Pen</span></span>
-      </a>
-      <nav class="main-nav" aria-label="Navigasi utama">
-        <button class="main-nav-link is-active" type="button" data-show-discover data-nav-view="discover">Jelajahi</button>
-        <button class="main-nav-link" type="button" data-show-learning data-nav-view="learning">Belajar</button>
-        <button class="main-nav-link" type="button" data-show-editor data-nav-view="editor">Editor</button>
-      </nav>
-      <label class="site-search">
-        <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.7" cy="8.7" r="5.6" /><path d="m13 13 4 4" /></svg>
-        <input id="pen-search" type="search" placeholder="Cari karya, tag, atau kreator..." aria-label="Cari karya, tag, atau kreator" />
-        <kbd>/</kbd>
-      </label>
-      <button class="button button-run create-button" type="button" data-show-editor>
-        <span aria-hidden="true">＋</span> Buat project
-      </button>
-      <button class="button button-quiet account-button" id="account-button" type="button">
-        <span class="account-avatar" aria-hidden="true">
-          <svg viewBox="0 0 20 20" focusable="false"><circle cx="10" cy="6.5" r="3.1" /><path d="M3.8 17a6.2 6.2 0 0 1 12.4 0" /></svg>
-        </span>
-        <span class="account-button-label">Profil</span>
-      </button>
-    </header>
+    <section class="learning-roadmap" aria-label="Daftar materi">
+      <a href="#learn-html"><span class="roadmap-number">01</span><span><b>index.html</b><small>Susunan
+            halaman</small></span><span class="roadmap-arrow">↘</span></a>
+      <a href="#learn-css"><span class="roadmap-number">02</span><span><b>style.css</b><small>Warna &
+            tampilan</small></span><span class="roadmap-arrow">↘</span></a>
+      <a href="#learn-js"><span class="roadmap-number">03</span><span><b>script.js</b><small>Interaksi
+            halaman</small></span><span class="roadmap-arrow">↘</span></a>
+    </section>
 
-    <div class="discovery-layout" id="discovery-view" hidden inert>
-      <aside class="sidebar" aria-label="Jelajahi">
-        <div class="sidebar-label">JELAJAHI</div>
-        <button class="sidebar-link is-active" type="button" data-category="all">
-          <span class="sidebar-icon">✳</span> Trending <span class="sidebar-arrow">↗</span>
-        </button>
-        <button class="sidebar-link" type="button" data-category="latest">
-          <span class="sidebar-icon">◷</span> Terbaru
-        </button>
-        <button class="sidebar-link" type="button" data-category="popular">
-          <span class="sidebar-icon">↗</span> Paling disukai
-        </button>
-
-        <div class="sidebar-label sidebar-label-spaced">TEMUKAN INSPIRASI</div>
-        <button class="sidebar-link" type="button" data-tag="CSS Art"><span class="tag-swatch swatch-lilac"></span> CSS Art</button>
-        <button class="sidebar-link" type="button" data-tag="Animasi"><span class="tag-swatch swatch-orange"></span> Animasi</button>
-        <button class="sidebar-link" type="button" data-tag="UI Design"><span class="tag-swatch swatch-blue"></span> UI Design</button>
-        <button class="sidebar-link" type="button" data-tag="Eksperimen"><span class="tag-swatch swatch-green"></span> Eksperimen</button>
-
-        <div class="sidebar-note">
-          <span class="sidebar-note-icon">✳</span>
-          <strong>Punya ide?</strong>
-          <p>Mulai dari HTML, CSS, dan JavaScript-mu sendiri.</p>
-          <button type="button" data-show-editor>Buka editor <span aria-hidden="true">↗</span></button>
+    <section class="lesson-section" id="learn-html" aria-labelledby="learn-html-title">
+      <div class="lesson-heading">
+        <span class="lesson-icon html-icon">&lt;&gt;</span>
+        <span class="lesson-kicker">01 / STRUKTUR</span>
+        <span class="lesson-file">index.html</span>
+      </div>
+      <div class="lesson-content">
+        <div class="lesson-copy">
+          <h2 id="learn-html-title">HTML adalah kerangka halaman.</h2>
+          <p>HTML memberi tahu browser apa isi halamanmu: judul, paragraf, gambar, tombol, dan bagian lainnya. File
+            <code>index.html</code> biasanya menjadi halaman pertama yang dibuka browser.
+          </p>
+          <p>Tag ditulis berpasangan: ada tag pembuka dan penutup. Isi halaman yang terlihat pengunjung diletakkan di
+            antara <code>&lt;body&gt;</code> dan <code>&lt;/body&gt;</code>.</p>
+          <ul class="lesson-points">
+            <li><code>&lt;h1&gt;</code> untuk judul utama.</li>
+            <li><code>&lt;p&gt;</code> untuk paragraf.</li>
+            <li><code>&lt;button&gt;</code> untuk tombol yang bisa ditekan.</li>
+          </ul>
         </div>
-        <div class="sidebar-footer">DIBUAT UNTUK BELAJAR <span>♥</span></div>
-      </aside>
-
-      <main class="discover-main">
-        <section class="discover-hero" aria-labelledby="discover-title">
-          <div class="hero-copy">
-            <div class="eyebrow"><span class="eyebrow-line"></span> IDE SEGAR, SETIAP HARI</div>
-            <h1 id="discover-title">Temukan. Pelajari.<br /><span>Buat versimu.</span></h1>
-            <p>Jelajahi kreasi web, temukan inspirasi baru, lalu kembangkan dengan caramu sendiri.</p>
-            <button class="button button-run hero-cta" type="button" data-show-editor>Mulai membuat <span aria-hidden="true">↗</span></button>
-          </div>
-          <div class="hero-art" aria-hidden="true">
-            <div class="hero-art-orbit orbit-one"></div>
-            <div class="hero-art-orbit orbit-two"></div>
-            <div class="hero-art-card hero-card-back"><span>CSS</span><i></i><i></i><i></i></div>
-            <div class="hero-art-card hero-card-front"><span class="hero-code-mark">&lt;/&gt;</span><span class="hero-art-label">IDE JADI NYATA</span></div>
-            <span class="hero-spark hero-spark-one">✳</span>
-            <span class="hero-spark hero-spark-two">✦</span>
-          </div>
-          <div class="hero-index"><span>01</span> / 03</div>
-        </section>
-
-        <section class="trending-section" aria-labelledby="trending-title">
-          <div class="section-heading">
-            <div>
-              <div class="eyebrow"><span class="eyebrow-line"></span> GALERI CONTOH KODEPEN</div>
-              <h2 id="trending-title">Inspirasi untuk dicoba <span class="trending-flame">↗</span></h2>
-              <p>Pelajari contoh project dan kembangkan di editor. Suka tersimpan di browser ini saja.</p>
-            </div>
-            <button class="sort-button" id="sort-button" type="button" data-sort="trending">Pilihan <span aria-hidden="true">⌄</span></button>
-          </div>
-
-          <div class="category-row" role="group" aria-label="Filter karya">
-            <button class="category-chip is-active" type="button" data-filter="Semua">Semua karya</button>
-            <button class="category-chip" type="button" data-filter="CSS Art">CSS Art</button>
-            <button class="category-chip" type="button" data-filter="Animasi">Animasi</button>
-            <button class="category-chip" type="button" data-filter="UI Design">UI Design</button>
-            <button class="category-chip" type="button" data-filter="Eksperimen">Eksperimen</button>
-          </div>
-
-          <div class="pen-grid" id="pen-grid">
-            <article class="pen-card" data-demo="sunrise" data-tags="Animasi Eksperimen" data-likes="0">
-              <button class="pen-preview preview-sunrise" type="button" data-open-card aria-label="Mulai project terinspirasi dari Sunrise Club">
-                <span class="sunrise-topline">SLOW MORNINGS CLUB <span>VOL. 01 — 2025</span></span>
-                <span class="sunrise-sun"></span>
-                <span class="sunrise-copy">take it<br />slow<span>.</span></span>
-                <span class="sunrise-caption">A little reminder to enjoy the moment.</span>
-                <span class="preview-corner">CSS</span>
-              </button>
-              <div class="pen-info">
-                <div class="pen-author-avatar avatar-sage">k</div>
-                <div class="pen-copy"><h3>Sunrise Club — a slow morning</h3><span>Contoh KodePen · <b>Animasi</b></span></div>
-                <button class="like-button" type="button" aria-label="Sukai Sunrise Club" aria-pressed="false"><span>♡</span> <b>0</b></button>
-              </div>
-            </article>
-
-            <article class="pen-card" data-demo="orbit" data-tags="CSS Art Eksperimen" data-likes="0">
-              <button class="pen-preview preview-orbit" type="button" data-open-card aria-label="Mulai project terinspirasi dari Orbit No. 04">
-                <span class="orbit-label">AN EXPLORATION IN MOTION</span>
-                <span class="orbit-ring ring-a"></span><span class="orbit-ring ring-b"></span><span class="orbit-ring ring-c"></span>
-                <span class="orbit-core"></span><span class="orbit-title">ORBIT<span>04</span></span>
-                <span class="preview-corner">CSS</span>
-              </button>
-              <div class="pen-info">
-                <div class="pen-author-avatar avatar-violet">k</div>
-                <div class="pen-copy"><h3>Orbit No. 04 — pure CSS motion</h3><span>Contoh KodePen · <b>CSS Art</b></span></div>
-                <button class="like-button" type="button" aria-label="Sukai Orbit No. 04" aria-pressed="false"><span>♡</span> <b>0</b></button>
-              </div>
-            </article>
-
-            <article class="pen-card" data-demo="playlist" data-tags="UI Design" data-likes="0">
-              <button class="pen-preview preview-playlist" type="button" data-open-card aria-label="Mulai project terinspirasi dari Little Things playlist">
-                <span class="playlist-window"><span class="playlist-dots">● ● ●</span><span class="playlist-label">YOUR DAILY MIX</span><span class="playlist-art">♫</span><span class="playlist-title">little<br />things</span><span class="playlist-track">A soft playlist for a softer day</span><span class="playlist-play">▶</span></span>
-                <span class="preview-corner">HTML · CSS</span>
-              </button>
-              <div class="pen-info">
-                <div class="pen-author-avatar avatar-peach">k</div>
-                <div class="pen-copy"><h3>Little Things — playlist card</h3><span>Contoh KodePen · <b>UI Design</b></span></div>
-                <button class="like-button" type="button" aria-label="Sukai Little Things" aria-pressed="false"><span>♡</span> <b>0</b></button>
-              </div>
-            </article>
-
-            <article class="pen-card" data-demo="weather" data-tags="UI Design Eksperimen" data-likes="0">
-              <button class="pen-preview preview-weather" type="button" data-open-card aria-label="Mulai project terinspirasi dari Weather">
-                <span class="weather-date">TUESDAY, 12 AUGUST</span><span class="weather-city">Yogyakarta <b>⌖</b></span>
-                <span class="weather-sun">☼</span><span class="weather-temp">27<span>°</span></span>
-                <span class="weather-state">A little cloudy, mostly lovely.</span><span class="weather-bottom">UV 3 <i></i> HUMIDITY 64%</span>
-                <span class="preview-corner">HTML · CSS</span>
-              </button>
-              <div class="pen-info">
-                <div class="pen-author-avatar avatar-blue">k</div>
-                <div class="pen-copy"><h3>Weather, but make it soft</h3><span>Contoh KodePen · <b>UI Design</b></span></div>
-                <button class="like-button" type="button" aria-label="Sukai Weather" aria-pressed="false"><span>♡</span> <b>0</b></button>
-              </div>
-            </article>
-
-            <article class="pen-card" data-demo="garden" data-tags="CSS Art" data-likes="0">
-              <button class="pen-preview preview-flower" type="button" data-open-card aria-label="Mulai project terinspirasi dari A tiny garden">
-                <span class="flower-grid"></span><span class="flower-stem"></span><span class="flower-head">✿</span>
-                <span class="flower-caption">A TINY GARDEN<br /><i>made with CSS & care</i></span>
-                <span class="preview-corner">CSS ART</span>
-              </button>
-              <div class="pen-info">
-                <div class="pen-author-avatar avatar-green">k</div>
-                <div class="pen-copy"><h3>A tiny garden made with CSS</h3><span>Contoh KodePen · <b>CSS Art</b></span></div>
-                <button class="like-button" type="button" aria-label="Sukai A tiny garden" aria-pressed="false"><span>♡</span> <b>0</b></button>
-              </div>
-            </article>
-
-            <article class="pen-card" data-demo="loader" data-tags="Animasi Eksperimen" data-likes="0">
-              <button class="pen-preview preview-loader" type="button" data-open-card aria-label="Mulai project terinspirasi dari Almost there">
-                <span class="loader-label">LOADING SOMETHING NICE</span><span class="loader-track"><i></i></span>
-                <span class="loader-number">78<span>%</span></span><span class="loader-caption">Good things take time.</span>
-                <span class="preview-corner">ANIMATION</span>
-              </button>
-              <div class="pen-info">
-                <div class="pen-author-avatar avatar-amber">k</div>
-                <div class="pen-copy"><h3>Almost there — a friendly loader</h3><span>Contoh KodePen · <b>Animasi</b></span></div>
-                <button class="like-button" type="button" aria-label="Sukai Almost there" aria-pressed="false"><span>♡</span> <b>0</b></button>
-              </div>
-            </article>
-          </div>
-          <p class="empty-state" id="empty-state" hidden>Tidak ada karya yang cocok. Coba kata kunci atau kategori lain.</p>
-          <button class="load-more-button" type="button" id="load-more" data-show-editor>Buat karya versimu <span aria-hidden="true">↗</span></button>
-        </section>
-
-        <footer class="discover-footer">
-          <span>IDE BEBAS. KODE TERBUKA. <b>♥</b></span>
-          <span>DICIPTAKAN OLEH HERIK <i>·</i> HTML <i>+</i> CSS <i>+</i> JS</span>
-          <button type="button" data-show-welcome>Halaman sambutan <span aria-hidden="true">↗</span></button>
-        </footer>
-      </main>
-    </div>
-
-    <main class="learning-view" id="learning-view" hidden inert>
-      <section class="learning-hero" aria-labelledby="learning-title">
-        <div class="eyebrow"><span class="eyebrow-line"></span> PANDUAN UNTUK PEMULA</div>
-        <h1 id="learning-title" tabindex="-1">Kenalan dengan dunia web.</h1>
-        <p>Setiap website dimulai dari tiga bagian sederhana. Pelajari perannya, lalu coba sendiri di editor.</p>
-        <div class="learning-hero-actions">
-          <button class="button button-run" type="button" data-show-editor>Mulai praktik <span aria-hidden="true">↗</span></button>
-          <span class="learning-reading-time"><span aria-hidden="true">◷</span> Bacaan singkat · 5 menit</span>
-        </div>
-        <div class="learning-hero-art" aria-hidden="true">
-          <div class="learn-float-card learn-float-html">&lt;html&gt;</div>
-          <div class="learn-float-card learn-float-css">#design</div>
-          <div class="learn-float-card learn-float-js">click( )</div>
-          <div class="learn-orbit"></div>
-          <div class="learn-orbit learn-orbit-small"></div>
-          <span class="learn-orbit-star">✳</span>
-        </div>
-      </section>
-
-      <section class="learning-roadmap" aria-label="Daftar materi">
-        <a href="#learn-html"><span class="roadmap-number">01</span><span><b>index.html</b><small>Susunan halaman</small></span><span class="roadmap-arrow">↘</span></a>
-        <a href="#learn-css"><span class="roadmap-number">02</span><span><b>style.css</b><small>Warna & tampilan</small></span><span class="roadmap-arrow">↘</span></a>
-        <a href="#learn-js"><span class="roadmap-number">03</span><span><b>script.js</b><small>Interaksi halaman</small></span><span class="roadmap-arrow">↘</span></a>
-      </section>
-
-      <section class="lesson-section" id="learn-html" aria-labelledby="learn-html-title">
-        <div class="lesson-heading">
-          <span class="lesson-icon html-icon">&lt;&gt;</span>
-          <span class="lesson-kicker">01 / STRUKTUR</span>
-          <span class="lesson-file">index.html</span>
-        </div>
-        <div class="lesson-content">
-          <div class="lesson-copy">
-            <h2 id="learn-html-title">HTML adalah kerangka halaman.</h2>
-            <p>HTML memberi tahu browser apa isi halamanmu: judul, paragraf, gambar, tombol, dan bagian lainnya. File <code>index.html</code> biasanya menjadi halaman pertama yang dibuka browser.</p>
-            <p>Tag ditulis berpasangan: ada tag pembuka dan penutup. Isi halaman yang terlihat pengunjung diletakkan di antara <code>&lt;body&gt;</code> dan <code>&lt;/body&gt;</code>.</p>
-            <ul class="lesson-points">
-              <li><code>&lt;h1&gt;</code> untuk judul utama.</li>
-              <li><code>&lt;p&gt;</code> untuk paragraf.</li>
-              <li><code>&lt;button&gt;</code> untuk tombol yang bisa ditekan.</li>
-            </ul>
-          </div>
-          <div class="lesson-code">
-            <div class="lesson-code-head"><span class="lesson-code-dot html-code-dot"></span> Contoh HTML</div>
-            <pre><code>&lt;h1&gt;Halo, dunia!&lt;/h1&gt;
+        <div class="lesson-code">
+          <div class="lesson-code-head"><span class="lesson-code-dot html-code-dot"></span> Contoh HTML</div>
+          <pre><code>&lt;h1&gt;Halo, dunia!&lt;/h1&gt;
 &lt;p&gt;Ini website pertamaku.&lt;/p&gt;
 &lt;button&gt;Klik aku&lt;/button&gt;</code></pre>
-            <div class="lesson-result"><span>HASILNYA</span><div><strong>Halo, dunia!</strong><p>Ini website pertamaku.</p><button type="button" tabindex="-1">Klik aku</button></div></div>
+          <div class="lesson-result"><span>HASILNYA</span>
+            <div><strong>Halo, dunia!</strong>
+              <p>Ini website pertamaku.</p><button type="button" tabindex="-1">Klik aku</button>
+            </div>
           </div>
         </div>
-        <aside class="lesson-challenge" data-challenge-card="html">
-          <div class="challenge-main">
-            <div><span class="challenge-label">LATIHAN 01</span><h3>Buat kartu perkenalan</h3><p>Tambahkan judul, paragraf tentang dirimu, dan satu tombol ke dalam HTML.</p></div>
-            <button class="button button-run" type="button" data-start-challenge="html">Kerjakan <span aria-hidden="true">↗</span></button>
+      </div>
+      <aside class="lesson-challenge" data-challenge-card="html">
+        <div class="challenge-main">
+          <div><span class="challenge-label">LATIHAN 01</span>
+            <h3>Buat kartu perkenalan</h3>
+            <p>Tambahkan judul, paragraf tentang dirimu, dan satu tombol ke dalam HTML.</p>
           </div>
-          <div class="challenge-details">
-            <details><summary>Petunjuk</summary><p>Gunakan <code>&lt;h1&gt;</code> untuk nama, <code>&lt;p&gt;</code> untuk cerita singkat, dan <code>&lt;button&gt;</code> untuk tombol.</p></details>
-            <details><summary>Contoh jawaban</summary><pre><code>&lt;main&gt;
+          <button class="button button-run" type="button" data-start-challenge="html">Kerjakan <span
+              aria-hidden="true">↗</span></button>
+        </div>
+        <div class="challenge-details">
+          <details>
+            <summary>Petunjuk</summary>
+            <p>Gunakan <code>&lt;h1&gt;</code> untuk nama, <code>&lt;p&gt;</code> untuk cerita singkat, dan
+              <code>&lt;button&gt;</code> untuk tombol.
+            </p>
+          </details>
+          <details>
+            <summary>Contoh jawaban</summary>
+            <pre><code>&lt;main&gt;
   &lt;h1&gt;Halo, aku Rani!&lt;/h1&gt;
   &lt;p&gt;Aku sedang belajar membuat web.&lt;/p&gt;
   &lt;button&gt;Kenalan yuk&lt;/button&gt;
-&lt;/main&gt;</code></pre></details>
-            <button class="challenge-complete" type="button" data-complete-challenge="html" aria-pressed="false">Tandai selesai</button>
-          </div>
-        </aside>
-      </section>
-
-      <section class="lesson-section" id="learn-css" aria-labelledby="learn-css-title">
-        <div class="lesson-heading">
-          <span class="lesson-icon css-icon">#</span>
-          <span class="lesson-kicker">02 / TAMPILAN</span>
-          <span class="lesson-file">style.css</span>
+&lt;/main&gt;</code></pre>
+          </details>
+          <button class="challenge-complete" type="button" data-complete-challenge="html" aria-pressed="false">Tandai
+            selesai</button>
         </div>
-        <div class="lesson-content">
-          <div class="lesson-copy">
-            <h2 id="learn-css-title">CSS membuat halaman tampil menarik.</h2>
-            <p>CSS mengatur warna, ukuran tulisan, jarak, dan tata letak. Kita memilih elemen HTML menggunakan <em>selector</em>, lalu memberi aturan di dalam kurung kurawal.</p>
-            <p>Contoh di samping memilih semua elemen <code>&lt;h1&gt;</code>, mengubah warnanya, dan memberi jarak di bawah judul.</p>
-            <ul class="lesson-points">
-              <li><code>color</code> mengubah warna teks.</li>
-              <li><code>background</code> mengatur latar.</li>
-              <li><code>margin</code> mengatur jarak di luar elemen.</li>
-            </ul>
-          </div>
-          <div class="lesson-code">
-            <div class="lesson-code-head"><span class="lesson-code-dot css-code-dot"></span> Contoh CSS</div>
-            <pre><code>h1 {
+      </aside>
+    </section>
+
+    <section class="lesson-section" id="learn-css" aria-labelledby="learn-css-title">
+      <div class="lesson-heading">
+        <span class="lesson-icon css-icon">#</span>
+        <span class="lesson-kicker">02 / TAMPILAN</span>
+        <span class="lesson-file">style.css</span>
+      </div>
+      <div class="lesson-content">
+        <div class="lesson-copy">
+          <h2 id="learn-css-title">CSS membuat halaman tampil menarik.</h2>
+          <p>CSS mengatur warna, ukuran tulisan, jarak, dan tata letak. Kita memilih elemen HTML menggunakan
+            <em>selector</em>, lalu memberi aturan di dalam kurung kurawal.
+          </p>
+          <p>Contoh di samping memilih semua elemen <code>&lt;h1&gt;</code>, mengubah warnanya, dan memberi jarak di
+            bawah judul.</p>
+          <ul class="lesson-points">
+            <li><code>color</code> mengubah warna teks.</li>
+            <li><code>background</code> mengatur latar.</li>
+            <li><code>margin</code> mengatur jarak di luar elemen.</li>
+          </ul>
+        </div>
+        <div class="lesson-code">
+          <div class="lesson-code-head"><span class="lesson-code-dot css-code-dot"></span> Contoh CSS</div>
+          <pre><code>h1 {
   color: #7866cb;
   margin-bottom: 12px;
 }</code></pre>
-            <div class="lesson-result css-result"><span>HASILNYA</span><div><strong>Judul jadi berwarna!</strong><p>Atur tampilan sesukamu dengan CSS.</p></div></div>
+          <div class="lesson-result css-result"><span>HASILNYA</span>
+            <div><strong>Judul jadi berwarna!</strong>
+              <p>Atur tampilan sesukamu dengan CSS.</p>
+            </div>
           </div>
         </div>
-        <aside class="lesson-challenge" data-challenge-card="css">
-          <div class="challenge-main">
-            <div><span class="challenge-label">LATIHAN 02</span><h3>Beri gaya pada kartu</h3><p>Ubah warna latar, warna judul, dan sudut kartu agar tampil lebih menarik.</p></div>
-            <button class="button button-run" type="button" data-start-challenge="css">Kerjakan <span aria-hidden="true">↗</span></button>
+      </div>
+      <aside class="lesson-challenge" data-challenge-card="css">
+        <div class="challenge-main">
+          <div><span class="challenge-label">LATIHAN 02</span>
+            <h3>Beri gaya pada kartu</h3>
+            <p>Ubah warna latar, warna judul, dan sudut kartu agar tampil lebih menarik.</p>
           </div>
-          <div class="challenge-details">
-            <details><summary>Petunjuk</summary><p>Mulai dengan selector <code>body</code>, lalu atur <code>background</code>, <code>color</code>, dan <code>border-radius</code>.</p></details>
-            <details><summary>Contoh jawaban</summary><pre><code>body {
+          <button class="button button-run" type="button" data-start-challenge="css">Kerjakan <span
+              aria-hidden="true">↗</span></button>
+        </div>
+        <div class="challenge-details">
+          <details>
+            <summary>Petunjuk</summary>
+            <p>Mulai dengan selector <code>body</code>, lalu atur <code>background</code>, <code>color</code>, dan
+              <code>border-radius</code>.
+            </p>
+          </details>
+          <details>
+            <summary>Contoh jawaban</summary>
+            <pre><code>body {
   background: #f3e8ff;
   color: #4c326b;
 }
@@ -339,305 +428,379 @@
 .card {
   padding: 24px;
   border-radius: 16px;
-}</code></pre></details>
-            <button class="challenge-complete" type="button" data-complete-challenge="css" aria-pressed="false">Tandai selesai</button>
-          </div>
-        </aside>
-      </section>
-
-      <section class="lesson-section" id="learn-js" aria-labelledby="learn-js-title">
-        <div class="lesson-heading">
-          <span class="lesson-icon js-icon">JS</span>
-          <span class="lesson-kicker">03 / INTERAKSI</span>
-          <span class="lesson-file">script.js</span>
+}</code></pre>
+          </details>
+          <button class="challenge-complete" type="button" data-complete-challenge="css" aria-pressed="false">Tandai
+            selesai</button>
         </div>
-        <div class="lesson-content">
-          <div class="lesson-copy">
-            <h2 id="learn-js-title">JavaScript membuat halaman bereaksi.</h2>
-            <p>JavaScript menambahkan perilaku pada halaman. Misalnya, menampilkan pesan saat tombol diklik, membuka menu, atau memperbarui isi halaman.</p>
-            <p>Pilih elemen dengan <code>querySelector</code>, lalu dengarkan kejadian seperti <code>click</code>. Kode di dalam fungsi akan dijalankan ketika tombol ditekan.</p>
-            <ul class="lesson-points">
-              <li><code>document.querySelector()</code> mencari elemen.</li>
-              <li><code>addEventListener()</code> mendengarkan aksi.</li>
-              <li><code>textContent</code> mengganti teks elemen.</li>
-            </ul>
-          </div>
-          <div class="lesson-code">
-            <div class="lesson-code-head"><span class="lesson-code-dot js-code-dot"></span> Contoh JavaScript</div>
-            <pre><code>const tombol = document
+      </aside>
+    </section>
+
+    <section class="lesson-section" id="learn-js" aria-labelledby="learn-js-title">
+      <div class="lesson-heading">
+        <span class="lesson-icon js-icon">JS</span>
+        <span class="lesson-kicker">03 / INTERAKSI</span>
+        <span class="lesson-file">script.js</span>
+      </div>
+      <div class="lesson-content">
+        <div class="lesson-copy">
+          <h2 id="learn-js-title">JavaScript membuat halaman bereaksi.</h2>
+          <p>JavaScript menambahkan perilaku pada halaman. Misalnya, menampilkan pesan saat tombol diklik, membuka menu,
+            atau memperbarui isi halaman.</p>
+          <p>Pilih elemen dengan <code>querySelector</code>, lalu dengarkan kejadian seperti <code>click</code>. Kode di
+            dalam fungsi akan dijalankan ketika tombol ditekan.</p>
+          <ul class="lesson-points">
+            <li><code>document.querySelector()</code> mencari elemen.</li>
+            <li><code>addEventListener()</code> mendengarkan aksi.</li>
+            <li><code>textContent</code> mengganti teks elemen.</li>
+          </ul>
+        </div>
+        <div class="lesson-code">
+          <div class="lesson-code-head"><span class="lesson-code-dot js-code-dot"></span> Contoh JavaScript</div>
+          <pre><code>const tombol = document
   .querySelector("button");
 
 tombol.addEventListener("click", () =&gt; {
   tombol.textContent = "Berhasil!";
 });</code></pre>
-            <div class="lesson-result js-result"><span>URUTAN KERJANYA</span><div><span class="step-number">1</span> Cari tombol <span class="step-arrow">→</span> <span class="step-number">2</span> Tunggu klik <span class="step-arrow">→</span> <span class="step-number">3</span> Ubah teks</div></div>
+          <div class="lesson-result js-result"><span>URUTAN KERJANYA</span>
+            <div><span class="step-number">1</span> Cari tombol <span class="step-arrow">→</span> <span
+                class="step-number">2</span> Tunggu klik <span class="step-arrow">→</span> <span
+                class="step-number">3</span> Ubah teks</div>
           </div>
         </div>
-        <aside class="lesson-challenge" data-challenge-card="js">
-          <div class="challenge-main">
-            <div><span class="challenge-label">LATIHAN 03</span><h3>Buat tombol yang bereaksi</h3><p>Tambahkan aksi klik yang mengganti teks tombol menjadi “Berhasil!”.</p></div>
-            <button class="button button-run" type="button" data-start-challenge="js">Kerjakan <span aria-hidden="true">↗</span></button>
+      </div>
+      <aside class="lesson-challenge" data-challenge-card="js">
+        <div class="challenge-main">
+          <div><span class="challenge-label">LATIHAN 03</span>
+            <h3>Buat tombol yang bereaksi</h3>
+            <p>Tambahkan aksi klik yang mengganti teks tombol menjadi “Berhasil!”.</p>
           </div>
-          <div class="challenge-details">
-            <details><summary>Petunjuk</summary><p>Pilih tombol dengan <code>querySelector</code> lalu ubah <code>textContent</code> di dalam <code>addEventListener</code>.</p></details>
-            <details><summary>Contoh jawaban</summary><pre><code>const tombol = document.querySelector("button");
+          <button class="button button-run" type="button" data-start-challenge="js">Kerjakan <span
+              aria-hidden="true">↗</span></button>
+        </div>
+        <div class="challenge-details">
+          <details>
+            <summary>Petunjuk</summary>
+            <p>Pilih tombol dengan <code>querySelector</code> lalu ubah <code>textContent</code> di dalam
+              <code>addEventListener</code>.
+            </p>
+          </details>
+          <details>
+            <summary>Contoh jawaban</summary>
+            <pre><code>const tombol = document.querySelector("button");
 
 tombol.addEventListener("click", () =&gt; {
   tombol.textContent = "Berhasil!";
-});</code></pre></details>
-            <button class="challenge-complete" type="button" data-complete-challenge="js" aria-pressed="false">Tandai selesai</button>
-          </div>
-        </aside>
-      </section>
-
-      <section class="learning-next">
-        <span class="next-mark" aria-hidden="true">&lt;/&gt;</span>
-        <div><h2>Siap mencoba sendiri?</h2><p>Mulai dengan kerangka HTML yang sudah disiapkan. Kembangkan sedikit demi sedikit.</p></div>
-        <button class="button button-run" type="button" data-show-editor>Ke editor <span aria-hidden="true">↗</span></button>
-      </section>
-
-      <footer class="discover-footer learning-footer">
-        <span>SELAMAT BELAJAR. KALAU SALAH, COBA LAGI. <b>♥</b></span>
-        <span>DICIPTAKAN OLEH HERIK</span>
-      </footer>
-    </main>
-
-    <main class="account-view" id="profile-view" hidden inert>
-      <section class="account-card" aria-labelledby="profile-title">
-        <div class="eyebrow"><span class="eyebrow-line"></span> PROFIL PRIBADI</div>
-        <h1 id="profile-title" tabindex="-1">Profilmu.</h1>
-        <p class="account-intro">Kelola informasi akun KodePen. Profil ini hanya dapat dilihat dan diubah oleh akunmu.</p>
-        <div class="account-onboarding" id="profile-onboarding" hidden>
-          <strong id="profile-onboarding-title">Akun berhasil diverifikasi.</strong>
-          <span>Lengkapi profilmu untuk menyelesaikan pendaftaran KodePen.</span>
+});</code></pre>
+          </details>
+          <button class="challenge-complete" type="button" data-complete-challenge="js" aria-pressed="false">Tandai
+            selesai</button>
         </div>
-        <form class="profile-form" id="profile-form">
-          <label for="profile-email">Email akun</label>
-          <input id="profile-email" name="email" type="email" readonly />
-          <p class="profile-field-hint">Email dikelola oleh penyedia login dan tidak dapat diubah di sini.</p>
-          <label for="profile-display-name">Nama tampilan</label>
-          <input id="profile-display-name" name="displayName" maxlength="50" autocomplete="name" required />
-          <label for="profile-bio">Tentang dirimu</label>
-          <textarea id="profile-bio" name="bio" maxlength="240" rows="4" placeholder="Ceritakan sedikit tentang dirimu (opsional)"></textarea>
-          <p class="profile-field-hint">Maksimal 240 karakter. Informasi ini tetap privat.</p>
-          <div class="profile-form-actions">
-            <button class="button button-run" id="profile-save-button" type="submit">Simpan profil</button>
-            <button class="button button-quiet" id="sign-out-button" type="button">Keluar dari akun</button>
-          </div>
-          <p class="profile-status" id="profile-status" role="status" aria-live="polite"></p>
-        </form>
-        <aside class="account-privacy-note">
-          <strong>Project akun disimpan privat di Supabase.</strong>
-          <span>Project akun tersinkron di perangkat yang memakai akun ini. Project lama di browser tidak dipindahkan otomatis. Favorit dan progres latihan tetap lokal. Gunakan “Simpan ke perangkat” untuk membuat salinan file.</span>
-        </aside>
-      </section>
-    </main>
+      </aside>
+    </section>
 
-    <header class="topbar" id="editor-topbar" hidden inert>
-      <a class="brand" href="#" aria-label="KodePen beranda">
-        <span class="brand-mark" aria-hidden="true">&lt;/&gt;</span>
-        <span>Kode<span class="brand-light">Pen</span></span>
-      </a>
-      <div class="topbar-divider" aria-hidden="true"></div>
-      <div class="project-name">
-        <span class="project-kicker">PROJECT</span>
-        <span class="project-title">Website Pertamaku</span>
-        <span class="save-indicator"><span class="save-dot"></span> Tersimpan</span>
+    <section class="learning-next">
+      <span class="next-mark" aria-hidden="true">&lt;/&gt;</span>
+      <div>
+        <h2>Siap mencoba sendiri?</h2>
+        <p>Mulai dengan kerangka HTML yang sudah disiapkan. Kembangkan sedikit demi sedikit.</p>
       </div>
-      <div class="topbar-actions">
-        <button class="button button-quiet" id="back-button" type="button" data-show-discover>Jelajahi</button>
-        <button class="button button-quiet" type="button" data-show-learning>Belajar</button>
-        <button class="button button-quiet editor-account-button" type="button" data-open-account>Profil</button>
-        <button class="button button-quiet" id="open-projects" type="button">Save Proyek</button>
-        <button class="button button-quiet" id="reset-button" type="button" title="Kembalikan kerangka dasar">
-          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3.3 8a6.8 6.8 0 1 1-.1 3.8M3.3 4.7V8h3.4" /></svg>
-          <span>Reset</span>
-        </button>
-        <button class="button button-run" id="run-button" type="button">
-          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m7 4.8 8 5.2-8 5.2z" /></svg>
-          <span>Jalankan</span>
-          <kbd>Ctrl ↵</kbd>
-        </button>
-      </div>
-    </header>
+      <button class="button button-run" type="button" data-show-editor>Ke editor <span
+          aria-hidden="true">↗</span></button>
+    </section>
 
-    <dialog class="project-dialog account-dialog" id="account-dialog" aria-labelledby="account-dialog-title">
-      <div class="project-dialog-heading">
-        <div>
-          <span class="eyebrow">AKUN KODEPEN</span>
-          <h2 id="account-dialog-title">Daftar atau masuk</h2>
-          <p>Akun baru dibuat otomatis saat pertama kali masuk.</p>
+    <footer class="discover-footer learning-footer">
+      <span>SELAMAT BELAJAR. KALAU SALAH, COBA LAGI. <b>♥</b></span>
+      <span>DICIPTAKAN OLEH HERIK</span>
+    </footer>
+  </main>
+
+  <main class="account-view" id="profile-view" hidden inert>
+    <section class="account-card" aria-labelledby="profile-title">
+      <div class="eyebrow"><span class="eyebrow-line"></span> PROFIL PRIBADI</div>
+      <h1 id="profile-title" tabindex="-1">Profilmu.</h1>
+      <p class="account-intro">Kelola informasi akun KodePen. Profil ini hanya dapat dilihat dan diubah oleh akunmu.</p>
+      <div class="account-onboarding" id="profile-onboarding" hidden>
+        <strong id="profile-onboarding-title">Akun berhasil diverifikasi.</strong>
+        <span>Lengkapi profilmu untuk menyelesaikan pendaftaran KodePen.</span>
+      </div>
+      <form class="profile-form" id="profile-form">
+        <label for="profile-email">Email akun</label>
+        <input id="profile-email" name="email" type="email" readonly />
+        <p class="profile-field-hint">Email dikelola oleh penyedia login dan tidak dapat diubah di sini.</p>
+        <label for="profile-display-name">Nama tampilan</label>
+        <input id="profile-display-name" name="displayName" maxlength="50" autocomplete="name" required />
+        <label for="profile-bio">Tentang dirimu</label>
+        <textarea id="profile-bio" name="bio" maxlength="240" rows="4"
+          placeholder="Ceritakan sedikit tentang dirimu (opsional)"></textarea>
+        <p class="profile-field-hint">Maksimal 240 karakter. Informasi ini tetap privat.</p>
+        <div class="profile-form-actions">
+          <button class="button button-run" id="profile-save-button" type="submit">Simpan profil</button>
+          <button class="button button-quiet" id="sign-out-button" type="button">Keluar dari akun</button>
         </div>
-        <button class="dialog-close" type="button" data-close-account aria-label="Tutup">×</button>
-      </div>
-      <div class="auth-provider-list">
-        <button class="auth-provider-button" type="button" data-auth-provider="google">
-          <svg viewBox="0 0 20 20" aria-hidden="true"><path fill="#4285F4" d="M19.6 10.2c0-.7-.1-1.3-.2-2H10v3.8h5.4a4.6 4.6 0 0 1-2 3v2.5h3.2c1.9-1.8 3-4.3 3-7.3Z"/><path fill="#34A853" d="M10 20c2.7 0 5-.9 6.6-2.5l-3.2-2.5c-.9.6-2 .9-3.4.9a6 6 0 0 1-5.6-4.1H1.1v2.6A10 10 0 0 0 10 20Z"/><path fill="#FBBC05" d="M4.4 11.8a6 6 0 0 1 0-3.6V5.6H1.1a10 10 0 0 0 0 8.8l3.3-2.6Z"/><path fill="#EA4335" d="M10 4a5.4 5.4 0 0 1 3.8 1.5l2.9-2.9A9.6 9.6 0 0 0 10 0a10 10 0 0 0-8.9 5.6l3.3 2.6A6 6 0 0 1 10 4Z"/></svg>
-          Daftar / masuk dengan Google
-        </button>
-        <button class="auth-provider-button" type="button" data-auth-provider="github">
-          <svg viewBox="0 0 20 20" aria-hidden="true"><path fill="currentColor" d="M10 .7a9.3 9.3 0 0 0-2.9 18.1c.5.1.6-.2.6-.4v-1.7c-2.4.5-2.9-1-2.9-1-.4-1-1-1.3-1-1.3-.8-.5.1-.5.1-.5.9.1 1.4.9 1.4.9.8 1.4 2.1 1 2.6.8.1-.6.3-1 .6-1.3-1.9-.2-3.9-1-3.9-4.2 0-.9.3-1.7.9-2.3-.1-.2-.4-1.1.1-2.3 0 0 .7-.2 2.4.9a8.3 8.3 0 0 1 4.4 0c1.7-1.1 2.4-.9 2.4-.9.5 1.2.2 2.1.1 2.3.6.6.9 1.4.9 2.3 0 3.2-2 4-3.9 4.2.3.3.6.8.6 1.6v2.4c0 .2.2.5.6.4A9.3 9.3 0 0 0 10 .7Z"/></svg>
-          Daftar / masuk dengan GitHub
-        </button>
-      </div>
-      <p class="auth-explanation">Google atau GitHub memverifikasi akunmu. KodePen tidak menerima atau menyimpan kata sandi provider. Setelah login pertama, kamu akan diarahkan untuk melengkapi profil.</p>
-      <p class="auth-privacy-note">Project pada akun tersimpan privat di database Supabase dan dapat tersinkron lintas perangkat. Project tanpa akun tetap berada di browser.</p>
-      <p class="auth-setup-note" id="auth-setup-note" role="status" aria-live="polite"></p>
-      <p class="project-dialog-status" id="auth-dialog-status" role="status" aria-live="polite"></p>
-      <div class="auth-dialog-footer">
-        <button class="dialog-close-text" type="button" data-close-account>Tutup</button>
-        <a href="SUPABASE_SETUP.md" target="_blank" rel="noopener">Panduan mengaktifkan login</a>
-      </div>
-    </dialog>
-
-    <dialog class="project-dialog" id="project-dialog" aria-labelledby="project-dialog-title">
-      <div class="project-dialog-heading">
-        <div><span class="eyebrow">RUANG KERJAMU</span><h2 id="project-dialog-title">Save Proyek</h2><p id="project-storage-description">Project tersimpan di browser ini.</p></div>
-        <button class="dialog-close" type="button" data-close-projects aria-label="Tutup">×</button>
-      </div>
-      <form class="project-create-form" id="project-create-form">
-        <label for="new-project-title">Mulai project baru</label>
-        <div><input id="new-project-title" name="title" maxlength="60" placeholder="Nama project" required /><button class="button button-run" type="submit">Buat baru <span aria-hidden="true">＋</span></button></div>
+        <p class="profile-status" id="profile-status" role="status" aria-live="polite"></p>
       </form>
-      <div class="project-list-heading"><h3>Project tersimpan</h3><span id="project-count"></span></div>
-      <div class="project-list" id="project-list"></div>
-      <div class="project-tools">
-        <button class="button button-run" id="save-project-file" type="button">Simpan ke perangkat</button>
-        <button class="button button-quiet" id="export-project-json" type="button">Unduh JSON</button>
-        <button class="button button-quiet" id="export-project-html" type="button">Unduh HTML</button>
-        <label class="button button-quiet import-project-button" for="import-project-file">Impor JSON</label>
-        <input id="import-project-file" type="file" accept=".json,application/json" hidden />
+      <aside class="account-privacy-note">
+        <strong>Project akun disimpan privat di Supabase.</strong>
+        <span>Project akun tersinkron di perangkat yang memakai akun ini. Project lama di browser tidak dipindahkan
+          otomatis. Favorit dan progres latihan tetap lokal. Gunakan “Simpan ke perangkat” untuk membuat salinan
+          file.</span>
+      </aside>
+    </section>
+  </main>
+
+  <header class="topbar" id="editor-topbar" hidden inert>
+    <a class="brand" href="#" aria-label="KodePen beranda">
+      <span class="brand-mark" aria-hidden="true">&lt;/&gt;</span>
+      <span>Kode<span class="brand-light">Pen</span></span>
+    </a>
+    <div class="topbar-divider" aria-hidden="true"></div>
+    <div class="project-name">
+      <span class="project-kicker">PROJECT</span>
+      <span class="project-title">Website Pertamaku</span>
+      <span class="save-indicator"><span class="save-dot"></span> Tersimpan</span>
+    </div>
+    <div class="topbar-actions">
+      <button class="button button-quiet" id="back-button" type="button" data-show-discover>Jelajahi</button>
+      <button class="button button-quiet" type="button" data-show-learning>Belajar</button>
+      <button class="button button-quiet editor-account-button" type="button" data-open-account>Profil</button>
+      <button class="button button-quiet" id="open-projects" type="button">Save Proyek</button>
+      <button class="button button-quiet" id="reset-button" type="button" title="Kembalikan kerangka dasar">
+        <svg viewBox="0 0 20 20" aria-hidden="true">
+          <path d="M3.3 8a6.8 6.8 0 1 1-.1 3.8M3.3 4.7V8h3.4" />
+        </svg>
+        <span>Reset</span>
+      </button>
+      <button class="button button-run" id="run-button" type="button">
+        <svg viewBox="0 0 20 20" aria-hidden="true">
+          <path d="m7 4.8 8 5.2-8 5.2z" />
+        </svg>
+        <span>Jalankan</span>
+        <kbd>Ctrl ↵</kbd>
+      </button>
+    </div>
+  </header>
+
+  <dialog class="project-dialog account-dialog" id="account-dialog" aria-labelledby="account-dialog-title">
+    <div class="project-dialog-heading">
+      <div>
+        <span class="eyebrow">AKUN KODEPEN</span>
+        <h2 id="account-dialog-title">Daftar atau masuk</h2>
+        <p>Akun baru dibuat otomatis saat pertama kali masuk.</p>
       </div>
-      <div class="project-cloud-tools">
-        <p class="project-cloud-status" id="project-cloud-status" role="status" aria-live="polite"></p>
-        <button class="button button-quiet" id="migrate-local-projects" type="button" hidden>Simpan project lokal ke akun</button>
+      <button class="dialog-close" type="button" data-close-account aria-label="Tutup">×</button>
+    </div>
+    <div class="auth-provider-list">
+      <button class="auth-provider-button" type="button" data-auth-provider="google">
+        <svg viewBox="0 0 20 20" aria-hidden="true">
+          <path fill="#4285F4"
+            d="M19.6 10.2c0-.7-.1-1.3-.2-2H10v3.8h5.4a4.6 4.6 0 0 1-2 3v2.5h3.2c1.9-1.8 3-4.3 3-7.3Z" />
+          <path fill="#34A853"
+            d="M10 20c2.7 0 5-.9 6.6-2.5l-3.2-2.5c-.9.6-2 .9-3.4.9a6 6 0 0 1-5.6-4.1H1.1v2.6A10 10 0 0 0 10 20Z" />
+          <path fill="#FBBC05" d="M4.4 11.8a6 6 0 0 1 0-3.6V5.6H1.1a10 10 0 0 0 0 8.8l3.3-2.6Z" />
+          <path fill="#EA4335"
+            d="M10 4a5.4 5.4 0 0 1 3.8 1.5l2.9-2.9A9.6 9.6 0 0 0 10 0a10 10 0 0 0-8.9 5.6l3.3 2.6A6 6 0 0 1 10 4Z" />
+        </svg>
+        Daftar / masuk dengan Google
+      </button>
+      <button class="auth-provider-button" type="button" data-auth-provider="github">
+        <svg viewBox="0 0 20 20" aria-hidden="true">
+          <path fill="currentColor"
+            d="M10 .7a9.3 9.3 0 0 0-2.9 18.1c.5.1.6-.2.6-.4v-1.7c-2.4.5-2.9-1-2.9-1-.4-1-1-1.3-1-1.3-.8-.5.1-.5.1-.5.9.1 1.4.9 1.4.9.8 1.4 2.1 1 2.6.8.1-.6.3-1 .6-1.3-1.9-.2-3.9-1-3.9-4.2 0-.9.3-1.7.9-2.3-.1-.2-.4-1.1.1-2.3 0 0 .7-.2 2.4.9a8.3 8.3 0 0 1 4.4 0c1.7-1.1 2.4-.9 2.4-.9.5 1.2.2 2.1.1 2.3.6.6.9 1.4.9 2.3 0 3.2-2 4-3.9 4.2.3.3.6.8.6 1.6v2.4c0 .2.2.5.6.4A9.3 9.3 0 0 0 10 .7Z" />
+        </svg>
+        Daftar / masuk dengan GitHub
+      </button>
+    </div>
+    <p class="auth-explanation">Google atau GitHub memverifikasi akunmu. KodePen tidak menerima atau menyimpan kata
+      sandi provider. Setelah login pertama, kamu akan diarahkan untuk melengkapi profil.</p>
+    <p class="auth-privacy-note">Project pada akun tersimpan privat di database Supabase dan dapat tersinkron lintas
+      perangkat. Project tanpa akun tetap berada di browser.</p>
+    <p class="auth-setup-note" id="auth-setup-note" role="status" aria-live="polite"></p>
+    <p class="project-dialog-status" id="auth-dialog-status" role="status" aria-live="polite"></p>
+    <div class="auth-dialog-footer">
+      <button class="dialog-close-text" type="button" data-close-account>Tutup</button>
+      <a href="SUPABASE_SETUP.md" target="_blank" rel="noopener">Panduan mengaktifkan login</a>
+    </div>
+  </dialog>
+
+  <dialog class="project-dialog" id="project-dialog" aria-labelledby="project-dialog-title">
+    <div class="project-dialog-heading">
+      <div><span class="eyebrow">RUANG KERJAMU</span>
+        <h2 id="project-dialog-title">Save Proyek</h2>
+        <p id="project-storage-description">Project tersimpan di browser ini.</p>
       </div>
-      <p class="project-file-status" id="project-file-status">Project tersimpan otomatis di browser. Pilih “Simpan ke perangkat” untuk membuat file di perangkat ini.</p>
-      <details class="project-share-details">
-        <summary>Bagikan tautan project (berisi kode project)</summary>
-        <p>Siapa pun yang memiliki tautan dapat membaca kode di dalamnya. Untuk menjaga privasi, bagikan file project hanya kepada orang tepercaya.</p>
-        <button class="button button-quiet" id="share-project" type="button">Buat tautan berbagi</button>
-      </details>
-      <div class="share-field" id="share-field" hidden>
-        <label for="share-project-url">Tautan project</label>
-        <input id="share-project-url" type="text" readonly />
-        <p>Jika situs masih dibuka dari file lokal, tautan ini hanya bekerja di perangkat ini. Hosting situs agar dapat dibagikan ke orang lain.</p>
+      <button class="dialog-close" type="button" data-close-projects aria-label="Tutup">×</button>
+    </div>
+    <form class="project-create-form" id="project-create-form">
+      <label for="new-project-title">Mulai project baru</label>
+      <div><input id="new-project-title" name="title" maxlength="60" placeholder="Nama project" required /><button
+          class="button button-run" type="submit">Buat baru <span aria-hidden="true">＋</span></button></div>
+    </form>
+    <div class="project-list-heading">
+      <h3>Project tersimpan</h3><span id="project-count"></span>
+    </div>
+    <div class="project-list" id="project-list"></div>
+    <div class="project-tools">
+      <button class="button button-run" id="save-project-file" type="button">Simpan ke perangkat</button>
+      <button class="button button-quiet" id="export-project-json" type="button">Unduh JSON</button>
+      <button class="button button-quiet" id="export-project-html" type="button">Unduh HTML</button>
+      <label class="button button-quiet import-project-button" for="import-project-file">Impor JSON</label>
+      <input id="import-project-file" type="file" accept=".json,application/json" hidden />
+    </div>
+    <div class="project-cloud-tools">
+      <p class="project-cloud-status" id="project-cloud-status" role="status" aria-live="polite"></p>
+      <button class="button button-quiet" id="migrate-local-projects" type="button" hidden>Simpan project lokal ke
+        akun</button>
+    </div>
+    <p class="project-file-status" id="project-file-status">Project tersimpan otomatis di browser. Pilih “Simpan ke
+      perangkat” untuk membuat file di perangkat ini.</p>
+    <details class="project-share-details">
+      <summary>Bagikan tautan project (berisi kode project)</summary>
+      <p>Siapa pun yang memiliki tautan dapat membaca kode di dalamnya. Untuk menjaga privasi, bagikan file project
+        hanya kepada orang tepercaya.</p>
+      <button class="button button-quiet" id="share-project" type="button">Buat tautan berbagi</button>
+    </details>
+    <div class="share-field" id="share-field" hidden>
+      <label for="share-project-url">Tautan project</label>
+      <input id="share-project-url" type="text" readonly />
+      <p>Jika situs masih dibuka dari file lokal, tautan ini hanya bekerja di perangkat ini. Hosting situs agar dapat
+        dibagikan ke orang lain.</p>
+    </div>
+    <p class="project-dialog-status" id="project-dialog-status" role="status" aria-live="polite"></p>
+  </dialog>
+
+  <main class="app-main" id="editor-view" hidden inert>
+    <section class="workspace-heading" aria-labelledby="workspace-title">
+      <div>
+        <div class="eyebrow"><span class="eyebrow-line"></span> RUANG BERMAIN WEB</div>
+        <h1 id="workspace-title">Ide kecil, jadi sesuatu yang nyata.</h1>
+        <p>Tulis kode di sebelah kiri. Jika ada kesalahan sintaks, barisnya ditandai merah.</p>
       </div>
-      <p class="project-dialog-status" id="project-dialog-status" role="status" aria-live="polite"></p>
-    </dialog>
+      <div class="heading-note"><span class="sparkle" aria-hidden="true">✳</span> Coba ubah kodenya!</div>
+    </section>
 
-    <main class="app-main" id="editor-view" hidden inert>
-      <section class="workspace-heading" aria-labelledby="workspace-title">
-        <div>
-          <div class="eyebrow"><span class="eyebrow-line"></span> RUANG BERMAIN WEB</div>
-          <h1 id="workspace-title">Ide kecil, jadi sesuatu yang nyata.</h1>
-          <p>Tulis kode di sebelah kiri. Jika ada kesalahan sintaks, barisnya ditandai merah.</p>
-        </div>
-        <div class="heading-note"><span class="sparkle" aria-hidden="true">✳</span> Coba ubah kodenya!</div>
-      </section>
-
-      <section class="workspace" aria-label="Editor dan pratinjau website">
-        <div class="editors-column">
-          <section class="editor-panel editor-html" aria-labelledby="html-label">
-            <div class="panel-heading">
-              <div class="language-title">
-                <span class="language-icon html-icon" aria-hidden="true">&lt;&gt;</span>
-                <h2 id="html-label">HTML</h2>
-                <span class="file-label">index.html</span>
-              </div>
-              <span class="language-hint">STRUKTUR</span>
+    <section class="workspace" aria-label="Editor dan pratinjau website">
+      <div class="editors-column">
+        <section class="editor-panel editor-html" aria-labelledby="html-label">
+          <div class="panel-heading">
+            <div class="language-title">
+              <span class="language-icon html-icon" aria-hidden="true">&lt;&gt;</span>
+              <h2 id="html-label">HTML</h2>
+              <span class="file-label">index.html</span>
             </div>
-            <div class="editor-body">
-              <div class="line-numbers" id="html-lines" aria-hidden="true"></div>
-              <div class="editor-code-highlight" id="html-highlight" aria-hidden="true"><pre></pre></div>
-              <textarea id="html-editor" class="code-editor" aria-label="Editor kode HTML" spellcheck="false" autocapitalize="off" autocomplete="off"></textarea>
-            </div>
-          </section>
-
-          <section class="editor-panel editor-css" aria-labelledby="css-label">
-            <div class="panel-heading">
-              <div class="language-title">
-                <span class="language-icon css-icon" aria-hidden="true">#</span>
-                <h2 id="css-label">CSS</h2>
-                <span class="file-label">style.css</span>
-              </div>
-              <span class="language-hint">TAMPILAN</span>
-            </div>
-            <div class="editor-body">
-              <div class="line-numbers" id="css-lines" aria-hidden="true"></div>
-              <div class="editor-code-highlight" id="css-highlight" aria-hidden="true"><pre></pre></div>
-              <textarea id="css-editor" class="code-editor" aria-label="Editor kode CSS" spellcheck="false" autocapitalize="off" autocomplete="off"></textarea>
-            </div>
-          </section>
-
-          <section class="editor-panel editor-js" aria-labelledby="js-label">
-            <div class="panel-heading">
-              <div class="language-title">
-                <span class="language-icon js-icon" aria-hidden="true">JS</span>
-                <h2 id="js-label">JavaScript</h2>
-                <span class="file-label">script.js</span>
-              </div>
-              <span class="language-hint">INTERAKSI</span>
-            </div>
-            <div class="editor-body">
-              <div class="line-numbers" id="js-lines" aria-hidden="true"></div>
-              <div class="editor-code-highlight" id="js-highlight" aria-hidden="true"><pre></pre></div>
-              <textarea id="js-editor" class="code-editor" aria-label="Editor kode JavaScript" spellcheck="false" autocapitalize="off" autocomplete="off"></textarea>
-            </div>
-          </section>
-        </div>
-
-        <section class="preview-panel" aria-labelledby="preview-title">
-          <div class="preview-toolbar">
-            <div class="preview-heading">
-              <span class="preview-live-dot" aria-hidden="true"></span>
-              <h2 id="preview-title">Pratinjau</h2>
-              <span class="preview-tag">LIVE</span>
-            </div>
-            <div class="viewport-controls" role="group" aria-label="Ukuran pratinjau">
-              <button class="viewport-button is-active" data-viewport="desktop" type="button" aria-label="Pratinjau desktop" aria-pressed="true" title="Desktop">
-                <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.8" y="3.5" width="14.4" height="10.2" rx="1.5" /><path d="M7.2 16.5h5.6M10 13.8v2.7" /></svg>
-              </button>
-              <button class="viewport-button" data-viewport="tablet" type="button" aria-label="Pratinjau tablet" aria-pressed="false" title="Tablet">
-                <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="4.3" y="2.4" width="11.4" height="15.2" rx="1.8" /><path d="M9 15.1h2" /></svg>
-              </button>
-              <button class="viewport-button" data-viewport="mobile" type="button" aria-label="Pratinjau ponsel" aria-pressed="false" title="Ponsel">
-                <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="6" y="1.8" width="8" height="16.4" rx="2" /><path d="M9 15.6h2" /></svg>
-              </button>
-            </div>
+            <span class="language-hint">STRUKTUR</span>
           </div>
-          <div class="preview-canvas">
-            <div class="browser-bar">
-              <div class="browser-tab-row">
-                <div class="browser-dots" aria-hidden="true"><i></i><i></i><i></i></div>
-                <div class="browser-tab-title">
-                  <span class="browser-tab-icon" aria-hidden="true">◉</span>
-                  <span id="preview-page-title">Website Pertamaku</span>
-                </div>
-                <span class="browser-menu" aria-hidden="true">···</span>
-              </div>
-              <div class="address-bar"><span class="address-lock" aria-hidden="true">⌑</span><span>pratinjau-kamu.kodepen</span></div>
+          <div class="editor-body">
+            <div class="line-numbers" id="html-lines" aria-hidden="true"></div>
+            <div class="editor-code-highlight" id="html-highlight" aria-hidden="true">
+              <pre></pre>
             </div>
-            <div class="iframe-wrap" id="iframe-wrap">
-              <iframe
-                id="preview-frame"
-                title="Pratinjau hasil kode"
-                sandbox="allow-scripts"
-                referrerpolicy="no-referrer"
-              ></iframe>
-            </div>
-          </div>
-          <div class="preview-footer">
-            <span><span class="footer-status-dot"></span> Siap untuk bereksperimen</span>
-            <span class="preview-size" id="preview-size">Desktop · 100%</span>
+            <textarea id="html-editor" class="code-editor" aria-label="Editor kode HTML" spellcheck="false"
+              autocapitalize="off" autocomplete="off"></textarea>
           </div>
         </section>
-      </section>
 
-      <footer class="page-footer">
-        <span>DIBUAT UNTUK BELAJAR, BUKAN TAKUT SALAH.</span>
-        <span>HTML <b>+</b> CSS <b>+</b> JS <span class="footer-heart">♥</span></span>
-      </footer>
-    </main>
-  </body>
+        <section class="editor-panel editor-css" aria-labelledby="css-label">
+          <div class="panel-heading">
+            <div class="language-title">
+              <span class="language-icon css-icon" aria-hidden="true">#</span>
+              <h2 id="css-label">CSS</h2>
+              <span class="file-label">style.css</span>
+            </div>
+            <span class="language-hint">TAMPILAN</span>
+          </div>
+          <div class="editor-body">
+            <div class="line-numbers" id="css-lines" aria-hidden="true"></div>
+            <div class="editor-code-highlight" id="css-highlight" aria-hidden="true">
+              <pre></pre>
+            </div>
+            <textarea id="css-editor" class="code-editor" aria-label="Editor kode CSS" spellcheck="false"
+              autocapitalize="off" autocomplete="off"></textarea>
+          </div>
+        </section>
+
+        <section class="editor-panel editor-js" aria-labelledby="js-label">
+          <div class="panel-heading">
+            <div class="language-title">
+              <span class="language-icon js-icon" aria-hidden="true">JS</span>
+              <h2 id="js-label">JavaScript</h2>
+              <span class="file-label">script.js</span>
+            </div>
+            <span class="language-hint">INTERAKSI</span>
+          </div>
+          <div class="editor-body">
+            <div class="line-numbers" id="js-lines" aria-hidden="true"></div>
+            <div class="editor-code-highlight" id="js-highlight" aria-hidden="true">
+              <pre></pre>
+            </div>
+            <textarea id="js-editor" class="code-editor" aria-label="Editor kode JavaScript" spellcheck="false"
+              autocapitalize="off" autocomplete="off"></textarea>
+          </div>
+        </section>
+      </div>
+
+      <section class="preview-panel" aria-labelledby="preview-title">
+        <div class="preview-toolbar">
+          <div class="preview-heading">
+            <span class="preview-live-dot" aria-hidden="true"></span>
+            <h2 id="preview-title">Pratinjau</h2>
+            <span class="preview-tag">LIVE</span>
+          </div>
+          <div class="viewport-controls" role="group" aria-label="Ukuran pratinjau">
+            <button class="viewport-button is-active" data-viewport="desktop" type="button"
+              aria-label="Pratinjau desktop" aria-pressed="true" title="Desktop">
+              <svg viewBox="0 0 20 20" aria-hidden="true">
+                <rect x="2.8" y="3.5" width="14.4" height="10.2" rx="1.5" />
+                <path d="M7.2 16.5h5.6M10 13.8v2.7" />
+              </svg>
+            </button>
+            <button class="viewport-button" data-viewport="tablet" type="button" aria-label="Pratinjau tablet"
+              aria-pressed="false" title="Tablet">
+              <svg viewBox="0 0 20 20" aria-hidden="true">
+                <rect x="4.3" y="2.4" width="11.4" height="15.2" rx="1.8" />
+                <path d="M9 15.1h2" />
+              </svg>
+            </button>
+            <button class="viewport-button" data-viewport="mobile" type="button" aria-label="Pratinjau ponsel"
+              aria-pressed="false" title="Ponsel">
+              <svg viewBox="0 0 20 20" aria-hidden="true">
+                <rect x="6" y="1.8" width="8" height="16.4" rx="2" />
+                <path d="M9 15.6h2" />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="preview-canvas">
+          <div class="browser-bar">
+            <div class="browser-tab-row">
+              <div class="browser-dots" aria-hidden="true"><i></i><i></i><i></i></div>
+              <div class="browser-tab-title">
+                <span class="browser-tab-icon" aria-hidden="true">◉</span>
+                <span id="preview-page-title">Website Pertamaku</span>
+              </div>
+              <span class="browser-menu" aria-hidden="true">···</span>
+            </div>
+            <div class="address-bar"><span class="address-lock"
+                aria-hidden="true">⌑</span><span>pratinjau-kamu.kodepen</span></div>
+          </div>
+          <div class="iframe-wrap" id="iframe-wrap">
+            <iframe id="preview-frame" title="Pratinjau hasil kode" sandbox="allow-scripts"
+              referrerpolicy="no-referrer"></iframe>
+          </div>
+        </div>
+        <div class="preview-footer">
+          <span><span class="footer-status-dot"></span> Siap untuk bereksperimen</span>
+          <span class="preview-size" id="preview-size">Desktop · 100%</span>
+        </div>
+      </section>
+    </section>
+
+    <footer class="page-footer">
+      <span>DIBUAT UNTUK BELAJAR, BUKAN TAKUT SALAH.</span>
+      <span>HTML <b>+</b> CSS <b>+</b> JS <span class="footer-heart">♥</span></span>
+    </footer>
+  </main>
+</body>
+
 </html>

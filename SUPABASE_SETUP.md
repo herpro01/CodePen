@@ -42,6 +42,14 @@ OAuth tidak dapat digunakan saat membuka `index.html` sebagai `file://`. Jalanka
 
 Nilai `redirectTo` aplikasi mengikuti origin halaman yang sedang dibuka. Karena itu, setiap domain Vercel atau custom domain yang digunakan harus diizinkan dalam **Redirect URLs** Supabase. URL preview Vercel yang berubah-ubah tidak otomatis diizinkan; gunakan alamat preview yang tetap dan tambahkan secara eksplisit bila memang ingin menguji OAuth dari preview.
 
+### Publikasikan perubahan otomatis saat file disimpan
+
+Workspace VS Code ini memiliki task **Auto-publish website to Vercel** yang aktif saat folder dibuka. Saat VS Code meminta izin menjalankan automatic tasks, pilih **Allow Automatic Tasks**. Setelah file situs tidak berubah selama 5 detik, task akan memeriksa perubahan, membuat commit, lalu `push` ke branch `main`; Vercel kemudian memulai deployment produksi.
+
+Task hanya memublikasikan `index.html`, `app.js`, `auth-config.js`, `styles.css`, `SUPABASE_SETUP.md`, serta isi folder `images/` dan `supabase/`. Perubahan di luar daftar itu tidak otomatis dipublikasikan. Task juga menolak pola secret yang umum. Gunakan hanya nilai publik di `auth-config.js` dan pastikan Git sudah terautentikasi ke GitHub.
+
+Pesan status task muncul di terminal VS Code **Auto-publish website to Vercel**. Jika Git push gagal, commit tetap tersimpan lokal dan task menampilkan instruksi untuk mencoba `git push origin main`. Untuk menghentikan publikasi otomatis, pilih **Terminal → Run Task → Terminate Task** untuk task tersebut.
+
 Uji alur berikut:
 
 1. Pilih **Masuk**, lalu lanjutkan dengan Google atau GitHub.
