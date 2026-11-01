@@ -287,9 +287,6 @@ function enterWebsite() {
 
 function navigateToDiscover() {
   showView("discover");
-  if (!activeAuthUser) {
-    openAccount();
-  }
 }
 
 function showWelcome() {
