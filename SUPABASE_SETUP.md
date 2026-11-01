@@ -1,4 +1,4 @@
-# Mengaktifkan akun KodePen
+# Mengaktifkan akun CodeKita
 
 Fitur akun dan database project memakai Supabase Auth, Database, serta REST API yang dihasilkan Supabase (paket Free). Pengunjung yang memilih **Jelajahi** atau mulai membuat project akan diminta daftar atau masuk dengan Google atau GitHub. Akun dibuat otomatis saat seseorang pertama kali masuk; login berikutnya menggunakan akun yang sama. Pengguna baru diarahkan ke profil untuk melengkapi nama tampilan dan bio. Tidak perlu membuat server API berbayar terpisah.
 
@@ -65,6 +65,6 @@ Jika login ditolak provider atau konfigurasi belum lengkap, periksa pesan di dia
 - Project milik akun disimpan di `public.projects` pada Supabase dan disinkronkan saat login, saat project berubah/dihapus, serta saat aplikasi kembali difokuskan. RLS membatasi setiap baris ke pemilik akun. Perangkat/browser yang login ke akun sama akan menggunakan project cloud tersebut.
 - Project lama yang tersimpan di browser sebelum login tidak diunggah otomatis. Dari **Save Proyek**, pilih **Simpan project lokal ke akun** bila ingin menyalinnya. Salinan lokal tidak dihapus.
 - Tanpa login, project tetap tersimpan di browser. Favorit contoh dan progres latihan juga tetap lokal dan tidak disinkronkan.
-- Project yang sudah diekspor/disimpan ke file perangkat berada di luar penyimpanan akun KodePen; hapus atau pindahkan file tersebut secara terpisah.
+- Project yang sudah diekspor/disimpan ke file perangkat berada di luar penyimpanan akun CodeKita; hapus atau pindahkan file tersebut secara terpisah.
 - Contoh galeri bukan konten komunitas. Tautan berbagi project yang dibuat dari editor tetap dapat dibaca oleh siapa pun yang memilikinya.
 - Supabase Free memiliki kuota dan batas pemakaian yang dapat berubah. Pantau **Usage** di dashboard Supabase; konfigurasi frontend hanya memakai URL dan publishable/anon key, bukan service-role key.

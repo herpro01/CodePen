@@ -1347,7 +1347,7 @@ function downloadFile(filename, content, mimeType) {
 
 function getSafeProjectFilename(extension) {
   const title = document.querySelector("#editor-topbar .project-title").textContent;
-  const safeTitle = title.replace(/[<>:"/\\|?*]+/g, "-").trim() || "Project KodePen";
+  const safeTitle = title.replace(/[<>:"/\\|?*]+/g, "-").trim() || "Project CodeKita";
   return `${safeTitle}${extension}`;
 }
 
@@ -1371,7 +1371,7 @@ async function saveProjectToDevice() {
     const handle = await window.showSaveFilePicker({
       suggestedName: getSafeProjectFilename(".kodepen.json"),
       types: [{
-        description: "Project KodePen",
+        description: "Project CodeKita",
         accept: { "application/json": [".kodepen.json", ".json"] },
       }],
     });
@@ -1494,7 +1494,7 @@ document.querySelector("#share-project").addEventListener("click", async () => {
     try {
       await navigator.clipboard.writeText(url.href);
       projectDialogStatus.textContent = location.protocol === "file:"
-        ? "Tautan disalin. Tautan berbagi dapat dibuka orang lain setelah KodePen di-hosting."
+        ? "Tautan disalin. Tautan berbagi dapat dibuka orang lain setelah CodeKita di-hosting."
         : "Tautan project berhasil disalin.";
     } catch (error) {
       shareInput.focus();
@@ -1895,9 +1895,9 @@ function updateAccountButton() {
   }
   accountButton.setAttribute(
     "aria-label",
-    activeAuthUser ? `Profil ${displayName}` : "Profil — masuk atau daftar akun KodePen",
+    activeAuthUser ? `Profil ${displayName}` : "Profil — masuk atau daftar akun CodeKita",
   );
-  accountButton.title = activeAuthUser ? "Buka profil akun" : "Profil — masuk atau daftar akun KodePen";
+  accountButton.title = activeAuthUser ? "Buka profil akun" : "Profil — masuk atau daftar akun CodeKita";
 }
 
 function setCloudSyncStatus(message, isError = false) {
@@ -2296,7 +2296,7 @@ function getProviderDisplayName(user) {
 function getSuggestedDisplayName(user) {
   const metadata = user.user_metadata || {};
   const suggestion = metadata.full_name || metadata.name || metadata.user_name || user.email?.split("@")[0];
-  return String(suggestion || "Pengguna KodePen").trim().slice(0, 50) || "Pengguna KodePen";
+  return String(suggestion || "Pengguna CodeKita").trim().slice(0, 50) || "Pengguna CodeKita";
 }
 
 async function loadOrCreateProfile(user) {
@@ -2631,7 +2631,7 @@ function initializeAuth() {
           detectSessionInUrl: true,
         },
       });
-      authSetupNote.textContent = "Pilih Google atau GitHub. Login pertama akan membuat akun KodePen secara otomatis.";
+      authSetupNote.textContent = "Pilih Google atau GitHub. Login pertama akan membuat akun CodeKita secara otomatis.";
     } catch (error) {
       console.error("Klien Supabase gagal disiapkan.", error);
       authSetupNote.textContent = "Klien Supabase gagal disiapkan. Periksa URL dan publishable key di auth-config.js.";
