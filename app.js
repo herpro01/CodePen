@@ -1935,9 +1935,9 @@ function updateAccountButton() {
   }
   accountButton.setAttribute(
     "aria-label",
-    activeAuthUser ? `Profil ${displayName}` : "Profil — masuk atau daftar akun CodeKita",
+    activeAuthUser ? `Profil ${displayName}` : "Profil — buat akun CodeKita",
   );
-  accountButton.title = activeAuthUser ? "Buka profil akun" : "Profil — masuk atau daftar akun CodeKita";
+  accountButton.title = activeAuthUser ? "Buka profil akun" : "Profil — buat akun CodeKita";
 }
 
 async function loadProfileAvatar(element, path) {
@@ -2598,7 +2598,7 @@ function isValidSupabaseConfig(config) {
 async function registerAccount(event) {
   event.preventDefault();
   if (!supabaseClient) {
-    setAuthStatus(authDialogStatus, "Login belum siap. Lengkapi konfigurasi Supabase sesuai panduan.", true);
+    setAuthStatus(authDialogStatus, "Pembuatan akun belum siap. Lengkapi konfigurasi Supabase sesuai panduan.", true);
     return;
   }
   if (location.protocol === "file:") {
@@ -2700,7 +2700,7 @@ profileAvatarFileInput.addEventListener("change", () => {
 profileForm.addEventListener("submit", async (event) => {
   event.preventDefault();
   if (!supabaseClient || !activeAuthUser) {
-    setAuthStatus(profileStatus, "Masuk kembali untuk mengubah profil.", true);
+    setAuthStatus(profileStatus, "Sesi akun tidak ditemukan. Akun anonim yang sudah keluar tidak dapat dipulihkan.", true);
     return;
   }
 
@@ -2823,7 +2823,7 @@ function initializeAuth() {
   const configured = isValidSupabaseConfig(config);
   const providerSdk = window.supabase;
   if (!configured) {
-    authSetupNote.textContent = "Login belum aktif. Isi URL project dan publishable key di auth-config.js, lalu ikuti panduan setup.";
+    authSetupNote.textContent = "Pendaftaran belum aktif. Isi URL project dan publishable key di auth-config.js, lalu ikuti panduan setup.";
   } else if (!providerSdk || typeof providerSdk.createClient !== "function") {
     authSetupNote.textContent = "SDK Supabase tidak dapat dimuat. Periksa koneksi internet dan muat ulang halaman.";
   } else {
@@ -2843,12 +2843,6 @@ function initializeAuth() {
   }
 
   accountRegisterButton.disabled = !supabaseClient;
-
-  const providerError = new URLSearchParams(location.search).get("error_description");
-  if (providerError) {
-    setAuthStatus(authDialogStatus, `Login ditolak provider: ${providerError}`, true);
-    accountDialog.showModal();
-  }
 
   if (!supabaseClient) {
     return;

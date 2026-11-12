@@ -19,7 +19,7 @@
   <script src="https://cdn.jsdelivr.net/npm/acorn@8.15.0/dist/acorn.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/css-tree@3.1.0/dist/csstree.min.js" defer></script>
   <script src="auth-config.js" defer></script>
-  <script src="app.js?v=20261112-profile-save" defer></script>
+  <script src="app.js?v=20261112-anonymous-accounts" defer></script>
 </head>
 
 <body>
@@ -609,7 +609,7 @@ tombol.addEventListener("click", () =&gt; {
       <button class="button button-run" id="account-register-button" type="submit">Buat akun</button>
     </form>
     <p class="auth-setup-note" id="auth-setup-note" role="status" aria-live="polite"></p>
-    <p class="project-dialog-status" id="auth-dialog-status" role="status" aria-live="polite"></p>
+    <p class="project-dialog-status auth-dialog-status" id="auth-dialog-status" role="status" aria-live="polite"></p>
     <div class="auth-dialog-footer">
       <button class="dialog-close-text" type="button" data-close-account>Tutup</button>
       <a href="SUPABASE_SETUP.md" target="_blank" rel="noopener">Panduan setup akun</a>

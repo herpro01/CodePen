@@ -57,7 +57,7 @@ begin
   );
 
   birth_date_text := nullif(btrim(new.raw_user_meta_data ->> 'birth_date'), '');
-  if birth_date_text is not null then
+  if birth_date_text ~ '^[0-9]{4}-[0-9]{2}-[0-9]{2}$' then
     begin
       provider_birth_date := birth_date_text::date;
     exception
