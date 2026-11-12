@@ -6,7 +6,7 @@ Fitur akun dan database project memakai Supabase Auth, Database, serta REST API 
 
 1. Buat project di [Supabase](https://supabase.com/dashboard).
 2. Buka **SQL Editor**, lalu jalankan seluruh isi [`supabase/profiles.sql`](./supabase/profiles.sql). Jika sudah pernah menjalankan versi sebelumnya, jalankan skrip lengkap lagi untuk membuat tabel project dan bucket foto profil.
-3. Pastikan tabel `public.profiles` dan `public.projects` tersedia, bucket privat `profile-avatars` dibuat, serta Row Level Security aktif. Kebijakan pada skrip membatasi profil, project, dan foto ke akun pemilik.
+3. Pastikan tabel `public.profiles` dan `public.projects` tersedia, bucket privat `profile-avatars` dibuat, serta Row Level Security aktif. Kebijakan pada skrip membatasi profil, project, dan foto ke akun pemilik. Skrip juga membuat profil untuk akun Auth yang sudah terdaftar tetapi belum memiliki baris profil.
 
 ## 2. Atur kredensial publik aplikasi
 

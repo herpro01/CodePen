@@ -45,10 +45,10 @@ declare
   provider_name text;
 begin
   provider_name := coalesce(
-    nullif(new.raw_user_meta_data ->> 'full_name', ''),
-    nullif(new.raw_user_meta_data ->> 'name', ''),
-    nullif(new.raw_user_meta_data ->> 'user_name', ''),
-    nullif(split_part(coalesce(new.email, ''), '@', 1), ''),
+    nullif(btrim(new.raw_user_meta_data ->> 'full_name'), ''),
+    nullif(btrim(new.raw_user_meta_data ->> 'name'), ''),
+    nullif(btrim(new.raw_user_meta_data ->> 'user_name'), ''),
+    nullif(btrim(split_part(coalesce(new.email, ''), '@', 1)), ''),
     'Pengguna KodePen'
   );
 
@@ -64,6 +64,22 @@ drop trigger if exists on_auth_user_created_kodepen on auth.users;
 create trigger on_auth_user_created_kodepen
   after insert on auth.users
   for each row execute function public.create_kodepen_profile();
+
+insert into public.profiles (id, display_name)
+select
+  users.id,
+  left(
+    coalesce(
+      nullif(btrim(users.raw_user_meta_data ->> 'full_name'), ''),
+      nullif(btrim(users.raw_user_meta_data ->> 'name'), ''),
+      nullif(btrim(users.raw_user_meta_data ->> 'user_name'), ''),
+      nullif(btrim(split_part(coalesce(users.email, ''), '@', 1)), ''),
+      'Pengguna KodePen'
+    ),
+    50
+  )
+from auth.users as users
+on conflict (id) do nothing;
 
 grant select, insert, update on public.profiles to authenticated;
 

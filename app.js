@@ -2715,14 +2715,14 @@ profileForm.addEventListener("submit", async (event) => {
     const previousAvatarPath = activeProfile?.avatar_path || null;
     const { data, error } = await supabaseClient
       .from("profiles")
-      .update({
+      .upsert({
+        id: activeAuthUser.id,
         display_name: displayName,
         bio,
         avatar_path: uploadedAvatarPath || previousAvatarPath,
         profile_completed: true,
         updated_at: new Date().toISOString(),
-      })
-      .eq("id", activeAuthUser.id)
+      }, { onConflict: "id" })
       .select("id, display_name, bio, avatar_path, profile_completed, updated_at")
       .single();
     if (error) {
