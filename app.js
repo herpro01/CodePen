@@ -2432,7 +2432,7 @@ async function loadOrCreateProfile(user) {
   throw createError;
 }
 
-function showProfile(user, profile) {
+function showProfile(profile) {
   profileBirthDateInput.value = profile.birth_date || "";
   document.querySelector("#profile-display-name").value = profile.display_name;
   document.querySelector("#profile-bio").value = profile.bio;
@@ -2442,7 +2442,7 @@ function showProfile(user, profile) {
     void loadProfileAvatar(profileAvatarPreview, profile.avatar_path);
   }
   const onboarding = document.querySelector("#profile-onboarding");
-  onboarding.hidden = profile.profile_completed;
+  onboarding.hidden = profile.profile_completed && Boolean(profile.birth_date);
   document.querySelector("#profile-onboarding-title").textContent = "Akun CodeKita siap digunakan.";
 }
 
@@ -2533,10 +2533,10 @@ async function handleAuthSession(event, session) {
       return;
     }
     activeProfile = profile;
-    showProfile(user, activeProfile);
+    showProfile(activeProfile);
     setAuthStatus(profileStatus, "");
     updateAccountButton();
-    if (!activeProfile.profile_completed) {
+    if (!activeProfile.profile_completed || !activeProfile.birth_date) {
       showView("profile");
     } else if (event === "SIGNED_IN") {
       const returnView = consumeAuthReturnView();
@@ -2763,7 +2763,7 @@ profileForm.addEventListener("submit", async (event) => {
       profileAvatarPreviewUrl = "";
     }
     profileAvatarFileInput.value = "";
-    showProfile(activeAuthUser, activeProfile);
+    showProfile(activeProfile);
     updateAccountButton();
     let saveMessage = "Profil berhasil disimpan.";
     if (uploadedAvatarPath && previousAvatarPath) {
