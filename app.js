@@ -1996,7 +1996,7 @@ function updateProjectStorageDescription() {
   const description = document.querySelector("#project-storage-description");
   description.textContent = activeAuthUser
     ? "Project akun tersimpan privat di Supabase dan hanya dapat diakses dari sesi browser ini."
-    : "Project tersimpan di browser ini.";
+    : "Project tersimpan hanya di browser/perangkat ini. Browser atau perangkat lain memiliki project terpisah.";
 }
 
 function getCloudProjectPayload(project, userId = cloudSyncUserId) {
@@ -2862,7 +2862,7 @@ function initializeAuth() {
 
 updateAccountButton();
 updateProjectStorageDescription();
-setCloudSyncStatus("Semua orang dapat menggunakan editor tanpa akun. Project tersimpan di browser ini.");
+setCloudSyncStatus("Project hanya tersimpan di browser/perangkat ini. Perangkat baru memulai dengan template Website Pertamaku.");
 window.addEventListener("focus", () => {
   void refreshCloudProjects();
 });
