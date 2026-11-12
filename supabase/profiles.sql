@@ -2,6 +2,7 @@ create table if not exists public.profiles (
   id uuid primary key references auth.users (id) on delete cascade,
   display_name varchar(50) not null default 'Pengguna KodePen'
     check (char_length(display_name) between 1 and 50),
+  birth_date date,
   bio varchar(240) not null default ''
     check (char_length(bio) <= 240),
   avatar_path text,
@@ -12,7 +13,8 @@ create table if not exists public.profiles (
 alter table public.profiles
   alter column display_name type varchar(50) using display_name::varchar(50),
   alter column bio type varchar(240) using bio::varchar(240),
-  add column if not exists avatar_path text;
+  add column if not exists avatar_path text,
+  add column if not exists birth_date date;
 
 alter table public.profiles enable row level security;
 
@@ -43,6 +45,8 @@ set search_path = ''
 as $$
 declare
   provider_name text;
+  provider_birth_date date;
+  birth_date_text text;
 begin
   provider_name := coalesce(
     nullif(btrim(new.raw_user_meta_data ->> 'full_name'), ''),
@@ -52,8 +56,27 @@ begin
     'Pengguna KodePen'
   );
 
-  insert into public.profiles (id, display_name)
-  values (new.id, left(provider_name, 50))
+  birth_date_text := nullif(btrim(new.raw_user_meta_data ->> 'birth_date'), '');
+  if birth_date_text is not null then
+    begin
+      provider_birth_date := birth_date_text::date;
+    exception
+      when invalid_datetime_format or datetime_field_overflow then
+        provider_birth_date := null;
+    end;
+  end if;
+
+  if provider_birth_date > current_date then
+    provider_birth_date := null;
+  end if;
+
+  insert into public.profiles (id, display_name, birth_date, profile_completed)
+  values (
+    new.id,
+    left(provider_name, 50),
+    provider_birth_date,
+    provider_birth_date is not null
+  )
   on conflict (id) do nothing;
 
   return new;

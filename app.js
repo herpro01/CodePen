@@ -1863,11 +1863,15 @@ const accountDialog = document.querySelector("#account-dialog");
 const accountButton = document.querySelector("#account-button");
 const authDialogStatus = document.querySelector("#auth-dialog-status");
 const authSetupNote = document.querySelector("#auth-setup-note");
+const accountRegistrationForm = document.querySelector("#account-registration-form");
+const accountRegisterButton = document.querySelector("#account-register-button");
+const registrationDisplayNameInput = document.querySelector("#registration-display-name");
+const registrationBirthDateInput = document.querySelector("#registration-birth-date");
 const profileStatus = document.querySelector("#profile-status");
 const profileForm = document.querySelector("#profile-form");
+const profileBirthDateInput = document.querySelector("#profile-birth-date");
 const profileAvatarFileInput = document.querySelector("#profile-avatar-file");
 const profileAvatarPreview = document.querySelector("#profile-avatar-preview");
-const authProviderButtons = [...document.querySelectorAll("[data-auth-provider]")];
 const profileAvatarMimeTypes = new Map([
   ["image/jpeg", "jpg"],
   ["image/png", "png"],
@@ -1878,6 +1882,26 @@ let supabaseClient = null;
 let activeAuthUser = null;
 let activeProfile = null;
 let profileAvatarPreviewUrl = "";
+
+function getLocalDateString(date = new Date()) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function isValidBirthDate(value) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+    return false;
+  }
+  const date = new Date(`${value}T00:00:00`);
+  return !Number.isNaN(date.getTime()) &&
+    getLocalDateString(date) === value &&
+    value <= getLocalDateString();
+}
+
+registrationBirthDateInput.max = getLocalDateString();
+profileBirthDateInput.max = getLocalDateString();
 
 function setAuthStatus(element, message, isError = false) {
   element.textContent = message;
@@ -1981,7 +2005,7 @@ function setCloudSyncStatus(message, isError = false) {
 function updateProjectStorageDescription() {
   const description = document.querySelector("#project-storage-description");
   description.textContent = activeAuthUser
-    ? "Project akun tersimpan di browser dan disinkronkan secara privat ke Supabase."
+    ? "Project akun tersimpan privat di Supabase dan hanya dapat diakses dari sesi browser ini."
     : "Project tersimpan di browser ini.";
 }
 
@@ -2355,17 +2379,6 @@ function openAccount() {
   }
 }
 
-function getProviderDisplayName(user) {
-  const provider = user.app_metadata?.provider;
-  if (provider === "google") {
-    return "Google";
-  }
-  if (provider === "github") {
-    return "GitHub";
-  }
-  return "penyedia login";
-}
-
 function getSuggestedDisplayName(user) {
   const metadata = user.user_metadata || {};
   const suggestion = metadata.full_name || metadata.name || metadata.user_name || user.email?.split("@")[0];
@@ -2373,7 +2386,7 @@ function getSuggestedDisplayName(user) {
 }
 
 async function loadOrCreateProfile(user) {
-  const profileColumns = "id, display_name, bio, avatar_path, profile_completed, updated_at";
+  const profileColumns = "id, display_name, birth_date, bio, avatar_path, profile_completed, updated_at";
   const { data, error } = await supabaseClient
     .from("profiles")
     .select(profileColumns)
@@ -2389,7 +2402,12 @@ async function loadOrCreateProfile(user) {
 
   const { data: createdProfile, error: createError } = await supabaseClient
     .from("profiles")
-    .insert({ id: user.id, display_name: getSuggestedDisplayName(user) })
+    .insert({
+      id: user.id,
+      display_name: getSuggestedDisplayName(user),
+      birth_date: user.user_metadata?.birth_date || null,
+      profile_completed: Boolean(user.user_metadata?.birth_date),
+    })
     .select(profileColumns)
     .single();
 
@@ -2415,7 +2433,7 @@ async function loadOrCreateProfile(user) {
 }
 
 function showProfile(user, profile) {
-  document.querySelector("#profile-email").value = user.email || "Email tidak dibagikan oleh provider";
+  profileBirthDateInput.value = profile.birth_date || "";
   document.querySelector("#profile-display-name").value = profile.display_name;
   document.querySelector("#profile-bio").value = profile.bio;
   profileAvatarPreview.dataset.avatarPath = profile.avatar_path || "";
@@ -2425,8 +2443,7 @@ function showProfile(user, profile) {
   }
   const onboarding = document.querySelector("#profile-onboarding");
   onboarding.hidden = profile.profile_completed;
-  document.querySelector("#profile-onboarding-title").textContent =
-    `Akun berhasil diverifikasi melalui ${getProviderDisplayName(user)}.`;
+  document.querySelector("#profile-onboarding-title").textContent = "Akun CodeKita siap digunakan.";
 }
 
 function clearProfileForm() {
@@ -2437,7 +2454,7 @@ function clearProfileForm() {
   profileAvatarFileInput.value = "";
   delete profileAvatarPreview.dataset.avatarPath;
   showProfileAvatarPreview("");
-  document.querySelector("#profile-email").value = "";
+  profileBirthDateInput.value = "";
   document.querySelector("#profile-display-name").value = "";
   document.querySelector("#profile-bio").value = "";
   document.querySelector("#profile-onboarding").hidden = true;
@@ -2578,21 +2595,26 @@ function isValidSupabaseConfig(config) {
   }
 }
 
-async function startOAuthSignIn(provider) {
+async function registerAccount(event) {
+  event.preventDefault();
   if (!supabaseClient) {
     setAuthStatus(authDialogStatus, "Login belum siap. Lengkapi konfigurasi Supabase sesuai panduan.", true);
     return;
   }
   if (location.protocol === "file:") {
-    setAuthStatus(authDialogStatus, "OAuth memerlukan alamat web. Jalankan situs melalui server lokal atau hosting HTTPS; file:// tidak didukung.", true);
+    setAuthStatus(authDialogStatus, "Pendaftaran memerlukan alamat web. Jalankan situs melalui server lokal atau hosting HTTPS; file:// tidak didukung.", true);
     return;
   }
 
-  for (const button of authProviderButtons) {
-    button.disabled = true;
+  const displayName = registrationDisplayNameInput.value.trim();
+  const birthDate = registrationBirthDateInput.value;
+  if (!displayName || displayName.length > 50 || !isValidBirthDate(birthDate)) {
+    setAuthStatus(authDialogStatus, "Isi nama (maksimal 50 karakter) dan tanggal lahir yang valid, bukan tanggal mendatang.", true);
+    return;
   }
-  setAuthStatus(authDialogStatus, `Menghubungkan ke ${provider === "google" ? "Google" : "GitHub"}…`);
 
+  accountRegisterButton.disabled = true;
+  setAuthStatus(authDialogStatus, "Membuat akun…");
   try {
     const returnView = !document.querySelector("#editor-view").hidden
       ? "editor"
@@ -2600,22 +2622,27 @@ async function startOAuthSignIn(provider) {
         ? "learning"
         : "discover";
     rememberAuthReturnView(returnView);
-    const redirectUrl = new URL(location.pathname, location.origin);
-    const { error } = await supabaseClient.auth.signInWithOAuth({
-      provider,
-      options: { redirectTo: redirectUrl.toString() },
+    const { error } = await supabaseClient.auth.signInAnonymously({
+      options: {
+        data: {
+          full_name: displayName,
+          birth_date: birthDate,
+        },
+      },
     });
     if (error) {
       throw error;
     }
+    accountDialog.close();
+    accountRegistrationForm.reset();
+    setAuthStatus(authDialogStatus, "");
   } catch (error) {
-    console.error(`Login ${provider} gagal dimulai.`, error);
+    console.error("Pendaftaran akun gagal.", error);
     clearAuthReturnView();
     const message = error instanceof Error ? error.message : "kesalahan tidak diketahui";
-    setAuthStatus(authDialogStatus, `Login gagal dimulai: ${message}`, true);
-    for (const button of authProviderButtons) {
-      button.disabled = false;
-    }
+    setAuthStatus(authDialogStatus, `Akun gagal dibuat: ${message}`, true);
+  } finally {
+    accountRegisterButton.disabled = false;
   }
 }
 
@@ -2631,9 +2658,7 @@ accountDialog.addEventListener("click", (event) => {
 
 accountButton.addEventListener("click", openAccount);
 
-for (const button of authProviderButtons) {
-  button.addEventListener("click", () => startOAuthSignIn(button.dataset.authProvider));
-}
+accountRegistrationForm.addEventListener("submit", registerAccount);
 
 profileAvatarFileInput.addEventListener("change", () => {
   const file = profileAvatarFileInput.files?.[0];
@@ -2680,10 +2705,11 @@ profileForm.addEventListener("submit", async (event) => {
   }
 
   const displayName = document.querySelector("#profile-display-name").value.trim();
+  const birthDate = profileBirthDateInput.value;
   const bio = document.querySelector("#profile-bio").value.trim();
   const avatarFile = profileAvatarFileInput.files?.[0] || null;
-  if (!displayName || displayName.length > 50 || bio.length > 240) {
-    setAuthStatus(profileStatus, "Nama tampilan wajib diisi (maksimal 50 karakter); bio maksimal 240 karakter.", true);
+  if (!displayName || displayName.length > 50 || !isValidBirthDate(birthDate) || bio.length > 240) {
+    setAuthStatus(profileStatus, "Nama (maksimal 50 karakter) dan tanggal lahir yang valid wajib diisi; bio maksimal 240 karakter.", true);
     return;
   }
   if (avatarFile && (!profileAvatarMimeTypes.has(avatarFile.type) || avatarFile.size > maxProfileAvatarSize)) {
@@ -2718,12 +2744,13 @@ profileForm.addEventListener("submit", async (event) => {
       .upsert({
         id: activeAuthUser.id,
         display_name: displayName,
+        birth_date: birthDate,
         bio,
         avatar_path: uploadedAvatarPath || previousAvatarPath,
         profile_completed: true,
         updated_at: new Date().toISOString(),
       }, { onConflict: "id" })
-      .select("id, display_name, bio, avatar_path, profile_completed, updated_at")
+      .select("id, display_name, birth_date, bio, avatar_path, profile_completed, updated_at")
       .single();
     if (error) {
       throw error;
@@ -2772,6 +2799,9 @@ profileForm.addEventListener("submit", async (event) => {
 
 document.querySelector("#sign-out-button").addEventListener("click", async (event) => {
   const button = event.currentTarget;
+  if (!window.confirm("Keluar dari akun ini? Karena tidak ada email atau kata sandi, akun tidak dapat dipulihkan setelah keluar.")) {
+    return;
+  }
   button.disabled = true;
   setAuthStatus(profileStatus, "Keluar dari akun…");
   try {
@@ -2805,16 +2835,14 @@ function initializeAuth() {
           detectSessionInUrl: true,
         },
       });
-      authSetupNote.textContent = "Pilih Google atau GitHub. Login pertama akan membuat akun CodeKita secara otomatis.";
+      authSetupNote.textContent = "Masukkan nama dan tanggal lahir. Akun akan tersimpan di browser ini saja.";
     } catch (error) {
       console.error("Klien Supabase gagal disiapkan.", error);
       authSetupNote.textContent = "Klien Supabase gagal disiapkan. Periksa URL dan publishable key di auth-config.js.";
     }
   }
 
-  for (const button of authProviderButtons) {
-    button.disabled = !supabaseClient;
-  }
+  accountRegisterButton.disabled = !supabaseClient;
 
   const providerError = new URLSearchParams(location.search).get("error_description");
   if (providerError) {
