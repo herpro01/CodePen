@@ -1925,9 +1925,9 @@ function updateAccountButton() {
   }
   accountButton.setAttribute(
     "aria-label",
-    activeAuthUser ? `Profil ${displayName}` : "Profil — buat akun CodeKita",
+    activeAuthUser ? `Profil ${displayName}` : "Profil",
   );
-  accountButton.title = activeAuthUser ? "Buka profil akun" : "Profil — buat akun CodeKita";
+  accountButton.title = activeAuthUser ? "Buka profil akun" : "Profil";
 }
 
 async function loadProfileAvatar(element, path) {
@@ -2314,7 +2314,7 @@ async function refreshCloudProjects() {
 
 async function migrateUnscopedLocalProjects() {
   if (!activeAuthUser || !cloudSyncReady) {
-    setCloudSyncStatus("Masuk dan tunggu sinkronisasi akun selesai sebelum menyimpan project lokal.", true);
+    setCloudSyncStatus("Project dapat disimpan langsung di browser ini tanpa akun.", true);
     return;
   }
 
