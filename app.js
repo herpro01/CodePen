@@ -1170,11 +1170,6 @@ function startNewProject(title = "Website Pertamaku") {
 
 for (const button of document.querySelectorAll("[data-show-editor]")) {
   button.addEventListener("click", () => {
-    if (!activeAuthUser) {
-      openAccount();
-      return;
-    }
-
     if (button.dataset.navView === "editor") {
       showView("editor");
     } else {
@@ -1204,11 +1199,6 @@ for (const button of document.querySelectorAll("[data-open-card]")) {
     const demo = demoProjects[button.closest(".pen-card")?.dataset.demo];
     if (!demo) {
       console.error("Contoh karya tidak ditemukan untuk kartu ini.");
-      return;
-    }
-
-    if (!activeAuthUser) {
-      openAccount();
       return;
     }
 
@@ -2872,7 +2862,7 @@ function initializeAuth() {
 
 updateAccountButton();
 updateProjectStorageDescription();
-setCloudSyncStatus("Tanpa login, project tersimpan di browser ini.");
+setCloudSyncStatus("Semua orang dapat menggunakan editor tanpa akun. Project tersimpan di browser ini.");
 window.addEventListener("focus", () => {
   void refreshCloudProjects();
 });
@@ -2881,4 +2871,3 @@ document.addEventListener("visibilitychange", () => {
     void refreshCloudProjects();
   }
 });
-initializeAuth();

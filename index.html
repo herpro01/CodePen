@@ -15,11 +15,9 @@
     href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap"
     rel="stylesheet" />
   <link rel="stylesheet" href="styles.css?v=20261102-profile-avatar" />
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/acorn@8.15.0/dist/acorn.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/css-tree@3.1.0/dist/csstree.min.js" defer></script>
-  <script src="auth-config.js" defer></script>
-  <script src="app.js?v=20261112-anonymous-accounts" defer></script>
+  <script src="app.js?v=20261112-no-account" defer></script>
 </head>
 
 <body>
@@ -69,7 +67,7 @@
     <button class="button button-run create-button" type="button" data-show-editor>
       <span aria-hidden="true">＋</span> Buat project
     </button>
-    <button class="button button-quiet account-button" id="account-button" type="button">
+    <button class="button button-quiet account-button" id="account-button" type="button" hidden>
       <span class="account-avatar" aria-hidden="true">
         <svg viewBox="0 0 20 20" focusable="false">
           <circle cx="10" cy="6.5" r="3.1" />
@@ -572,7 +570,7 @@ tombol.addEventListener("click", () =&gt; {
     <div class="topbar-actions">
       <button class="button button-quiet" id="back-button" type="button" data-show-discover>Jelajahi</button>
       <button class="button button-quiet" type="button" data-show-learning>Belajar</button>
-      <button class="button button-quiet editor-account-button" type="button" data-open-account>Profil</button>
+      <button class="button button-quiet editor-account-button" type="button" data-open-account hidden>Profil</button>
       <button class="button button-quiet" id="open-projects" type="button">Save Proyek</button>
       <button class="button button-quiet" id="reset-button" type="button" title="Kembalikan kerangka dasar">
         <svg viewBox="0 0 20 20" aria-hidden="true">
@@ -590,7 +588,7 @@ tombol.addEventListener("click", () =&gt; {
     </div>
   </header>
 
-  <dialog class="project-dialog account-dialog" id="account-dialog" aria-labelledby="account-dialog-title">
+  <dialog class="project-dialog account-dialog" id="account-dialog" aria-labelledby="account-dialog-title" hidden>
     <div class="project-dialog-heading">
       <div>
         <span class="eyebrow">AKUN CODEKITA</span>
@@ -620,7 +618,7 @@ tombol.addEventListener("click", () =&gt; {
     <div class="project-dialog-heading">
       <div><span class="eyebrow">RUANG KERJAMU</span>
         <h2 id="project-dialog-title">Save Proyek</h2>
-        <p id="project-storage-description">Project tersimpan di browser ini.</p>
+        <p id="project-storage-description">Project tersimpan otomatis di browser ini. Tidak perlu akun.</p>
       </div>
       <button class="dialog-close" type="button" data-close-projects aria-label="Tutup">×</button>
     </div>

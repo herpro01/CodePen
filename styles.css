@@ -4242,6 +4242,11 @@ a:focus-visible {
   white-space: nowrap;
 }
 
+#account-button[hidden],
+#editor-topbar .editor-account-button[hidden] {
+  display: none;
+}
+
 .account-button-label {
   max-width: 120px;
   overflow: hidden;
