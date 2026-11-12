@@ -237,6 +237,22 @@ document.querySelector("#restart").addEventListener("click", () => {
 };
 
 const editorIds = ["html", "css", "js"];
+const voidHtmlTags = new Set([
+  "area",
+  "base",
+  "br",
+  "col",
+  "embed",
+  "hr",
+  "img",
+  "input",
+  "link",
+  "meta",
+  "param",
+  "source",
+  "track",
+  "wbr",
+]);
 const editors = Object.fromEntries(
   editorIds.map((language) => [language, document.querySelector(`#${language}-editor`)]),
 );
@@ -1004,6 +1020,25 @@ for (const language of editorIds) {
   });
 
   editors[language].addEventListener("keydown", (event) => {
+    if (language === "html" && event.key === ">" && !event.ctrlKey && !event.metaKey && !event.altKey) {
+      const { selectionStart, selectionEnd, value } = editors.html;
+      const openingTag = selectionStart === selectionEnd
+        ? value.slice(0, selectionStart).match(/<([A-Za-z][A-Za-z0-9:-]*)(?:\s[^<>]*)?$/)
+        : null;
+      const tagName = openingTag?.[1];
+      const hasClosingTagAhead = tagName &&
+        new RegExp(`^\\s*<\\/\\s*${tagName}\\s*>`, "i").test(value.slice(selectionEnd));
+
+      if (tagName && !voidHtmlTags.has(tagName.toLowerCase()) && !hasClosingTagAhead) {
+        event.preventDefault();
+        const cursor = selectionStart;
+        editors.html.setRangeText(`></${tagName}>`, cursor, selectionEnd, "end");
+        editors.html.setSelectionRange(cursor + 1, cursor + 1);
+        editors.html.dispatchEvent(new Event("input", { bubbles: true }));
+        return;
+      }
+    }
+
     if (event.key === "Tab") {
       event.preventDefault();
       const { selectionStart, selectionEnd, value } = editors[language];

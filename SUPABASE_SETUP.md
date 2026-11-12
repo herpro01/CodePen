@@ -4,7 +4,8 @@ CodeKita dapat digunakan siapa saja tanpa registrasi, login, atau konfigurasi Su
 
 ## Penyimpanan project
 
-- Project tersimpan lokal di browser ini dan tidak disinkronkan ke perangkat lain.
+- Project tersimpan lokal dan terpisah untuk setiap browser/perangkat; project tidak disinkronkan dan tidak terlihat oleh pengguna di perangkat lain.
+- Browser/perangkat baru memulai dengan template awal **Website Pertamaku**, bukan project yang dibuat di perangkat lain.
 - Pilih **Save Proyek** untuk membuat, membuka, mengimpor, atau menghapus project.
 - Pilih **Simpan ke perangkat** atau unduh project sebagai file untuk menyimpan salinan di luar browser.
 - Menghapus data browser dapat menghapus project lokal. Simpan salinan file jika ingin membuat cadangan.
